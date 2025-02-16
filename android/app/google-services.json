@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "196822526321",
+    "project_id": "kronk-dev-2",
+    "storage_bucket": "kronk-dev-2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:196822526321:android:0ed077821f788a3d062ed0",
+        "android_client_info": {
+          "package_name": "com.kronk.kronk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "196822526321-jmismem2fv8kr0402s8p7jkq51irr56j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kronk.kronk",
+            "certificate_hash": "57e758f7f96e820309c606feb27834be1bf7c96d"
+          }
+        },
+        {
+          "client_id": "196822526321-10822uq06j500ejdfiaj8105fqpgrj22.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMjWn5iVrxDR5bKwYLw7NCBCYP8Jp6nLM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "196822526321-10822uq06j500ejdfiaj8105fqpgrj22.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "196822526321-1osqmsrgp96n5p323h2skhe413n8nngq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.kronk.kronk"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,104 @@
+name: kronk
+description: "A new Flutter project."
+publish_to: 'none'
+version: 1.0.0+1
+
+
+environment:
+  sdk: ^3.7.0
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  equatable:
+  path_provider:
+  hive:
+  hive_flutter:
+  flutter_bloc:
+  rive:
+  lottie:
+  iconsax:
+  page_transition:
+  dio:
+  flutter_staggered_grid_view:
+  icons_plus:
+  provider:
+  flutter_svg:
+  connectivity_plus:
+  cached_network_image:
+  custom_refresh_indicator:
+  image_picker:
+  permission_handler:
+  crop_your_image:
+  flutter_image_compress:
+  google_fonts:
+  image:
+  url_launcher:
+  jwt_decoder:
+  flutter_launcher_icons:
+  web_socket_channel:
+  google_sign_in:
+  firebase_core:
+  firebase_auth:
+  flutter_cache_manager:
+  flutter_native_splash:
+  flutter_riverpod:
+  tuple:
+  iconify_flutter:
+  in_app_review:
+  sliver_tools:
+  logger:
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+  hive_generator:
+  build_runner:
+
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/images/
+    - assets/icons/
+    - assets/icons/app/
+    - assets/icons/bold/
+    - assets/icons/linear/
+    - assets/icons/others/
+    - assets/icons/navbar/
+    - assets/animations/
+    - assets/translations/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path_android: "assets/icons/app/kronk-app-icon.png"
+  image_path_ios: "assets/icons/app/kronk-app-icon.png"
+  adaptive_icon_foreground: "assets/icons/app/kronk-foreground.png"
+  adaptive_icon_background: "assets/icons/app/kronk-background.png"
+  adaptive_icon_monochrome: "assets/icons/app/kronk-foreground-monochrome.png"
+  min_sdk_android: 28
+  remove_alpha_ios: true
+
+flutter_native_splash:
+  color: "#ffffff"
+  color_dark: "#050608"
+  image: "assets/icons/app/android12_image.png"
+  image_dark: "assets/icons/app/android12_image_dark.png"
+  android: true
+  ios: true
+  web: false
+
+  android_12:
+    color: "#ffffff"
+    color_dark: "#050608"
+    image: "assets/icons/app/android12_image.png"
+    image_dark: "assets/icons/app/android12_image_dark.png"
