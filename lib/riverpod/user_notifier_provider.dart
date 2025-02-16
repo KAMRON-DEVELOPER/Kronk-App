@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kronk/models/user_model.dart';
 import 'package:kronk/services/users_service.dart';
+import 'package:kronk/utility/my_logger.dart';
 import 'package:kronk/utility/storage.dart';
 
 enum ProfileState { view, edit }
@@ -35,23 +36,34 @@ class AsyncUserNotifier extends AutoDisposeAsyncNotifier<UserModel?> {
   }
 
   Future<UserModel?> _fetchProfile() async {
-        await Future.delayed(const Duration(seconds: 3)); // TODO simulate real server
+    try {
+      //await Future.delayed(const Duration(seconds: 3)); // Simulating server delay
 
-    List<ConnectivityResult> initialResults = await _connectivity.checkConnectivity();
+      List<ConnectivityResult> initialResults = await _connectivity.checkConnectivity();
+      bool isOnline = initialResults.any((ConnectivityResult result) => result != ConnectivityResult.none);
+      bool isAuthenticated = await _storage.getAsyncSettings(key: 'isAuthenticated', defaultValue: false);
 
-    bool isOnline = initialResults.any((ConnectivityResult result) => result != ConnectivityResult.none);
-    bool isAuthenticated = await _storage.getAsyncSettings(key: 'isAuthenticated', defaultValue: false);
+      if (isAuthenticated && isOnline) {
+        Response? response = await _usersService.fetchUser();
 
-    if (isAuthenticated && isOnline) {
-      Response? response = await _usersService.fetchUser();
+        if (response == null) return null;
 
-      if (response == null) return null;
-
-      return UserModel.fromJson(response.data);
-    } else if (isAuthenticated && !isOnline) {
-      return _storage.getUser();
+        try {
+          final userModel = UserModel.fromJson(response.data);
+          myLogger.d('2. userModel.username: ${userModel.username}');
+          return userModel;
+        } catch (e, stacktrace) {
+          myLogger.e('💀 Error parsing UserModel: $e \nStacktrace: $stacktrace');
+          return null;
+        }
+      } else if (isAuthenticated && !isOnline) {
+        return _storage.getUser();
+      }
+      return null;
+    } catch (e, stacktrace) {
+      myLogger.e('💀 Unexpected error in _fetchProfile: $e \nStacktrace: $stacktrace');
+      return null;
     }
-    return null;
   }
 
   Future<void> updateUser({required Map<String, dynamic> profileMap}) async {}
@@ -79,10 +91,7 @@ class AsyncUserNotifier extends AutoDisposeAsyncNotifier<UserModel?> {
 
         if (googleSignInAccount != null) {
           final GoogleSignInAuthentication googleAuth = await googleSignInAccount.authentication;
-          AuthCredential authCredential = GoogleAuthProvider.credential(
-            idToken: googleAuth.idToken,
-            accessToken: googleAuth.accessToken,
-          );
+          AuthCredential authCredential = GoogleAuthProvider.credential(idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
 
           await firebaseUser?.reauthenticateWithCredential(authCredential);
         }

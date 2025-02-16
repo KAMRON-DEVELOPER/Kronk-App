@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +7,7 @@ import 'package:kronk/models/user_model.dart';
 import 'package:kronk/riverpod/user_notifier_provider.dart';
 import 'package:kronk/utility/dimensions.dart';
 import 'package:kronk/utility/extensions.dart';
+import 'package:kronk/utility/my_logger.dart';
 import 'package:kronk/widgets/my_theme.dart';
 import '../../riverpod/theme_notifier_provider.dart';
 import '../../widgets/navbar.dart';
@@ -29,19 +28,14 @@ class ProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final MyTheme activeTheme = ref.watch(themeNotifierProvider);
     final AsyncValue<UserModel?> asyncUser = ref.watch(asyncUserNotifierProvider);
-    log('!!! building whole widgets...');
+    myLogger.d('building whole widgets...');
     return Scaffold(
       backgroundColor: activeTheme.background1,
       appBar: AppBar(
         backgroundColor: activeTheme.background1,
         title: Text('Profile', style: TextStyle(color: activeTheme.text3)),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.settings, color: activeTheme.text2),
-            onPressed: () => Navigator.pushNamed(context, '/settings'),
-          ),
-        ],
+        actions: [IconButton(icon: Icon(Icons.settings, color: activeTheme.text2), onPressed: () => Navigator.pushNamed(context, '/settings'))],
       ),
       body: asyncUser.when(
         data: (UserModel? user) => user != null ? ProfileWidget(user: user) : const ProfileSkeletonWidget(),
@@ -89,7 +83,7 @@ class _ProfileWidgetState extends ConsumerState<ProfileWidget> with SingleTicker
     //final double textSize2 = dimensions.textSize2;
     final double textSize3 = dimensions.textSize3;
     final double cornerRadius1 = dimensions.cornerRadius1;
-    log('!!! building profile widgets...');
+    myLogger.i('3. building profile widgets. username: ${widget.user.username}');
     return RefreshIndicator(
       onRefresh: () async => ref.read(asyncUserNotifierProvider.notifier).fetchProfile(),
       color: activeTheme.text2,
@@ -105,26 +99,19 @@ class _ProfileWidgetState extends ConsumerState<ProfileWidget> with SingleTicker
                 CircleAvatar(
                   radius: 48,
                   child: CachedNetworkImage(
-                    imageUrl: 'http://192.168.31.43:9000/dev-bucket-1/${widget.user.avatar ?? 'defaults/default-avatar.jpg'}',
+                    imageUrl: 'http://192.168.31.43:9000/dev-bucket/${widget.user.avatar ?? 'defaults/default-avatar.jpg'}',
                     fit: BoxFit.cover,
                     width: 96,
                     height: 96,
                     memCacheHeight: 96.cacheSize(context),
                     memCacheWidth: 96.cacheSize(context),
-                    imageBuilder: (context, imageProvider) => Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(image: imageProvider, fit: BoxFit.cover, isAntiAlias: true),
-                      ),
-                    ),
+                    imageBuilder: (context, imageProvider) => Container(decoration: BoxDecoration(shape: BoxShape.circle, image: DecorationImage(image: imageProvider, fit: BoxFit.cover, isAntiAlias: true))),
                     placeholder: (context, url) => CircularProgressIndicator(color: activeTheme.text2, strokeWidth: 2),
                     errorWidget: (context, url, error) => const Icon(Icons.error, size: 98, color: Colors.redAccent),
                   ),
                 ),
-                Text(widget.user.username, style: GoogleFonts.quicksand(color: activeTheme.text2, fontSize: textSize3, fontWeight: FontWeight.w600)),
-                Text(widget.user.email, style: GoogleFonts.quicksand(color: activeTheme.text2, fontSize: textSize3, fontWeight: FontWeight.w600)),
-                Text('${widget.user.avatar}', style: GoogleFonts.quicksand(color: activeTheme.text2, fontSize: textSize3, fontWeight: FontWeight.w600)),
-                Text(widget.user.id, style: GoogleFonts.quicksand(color: activeTheme.text2, fontSize: textSize3, fontWeight: FontWeight.w600)),
+                Text(widget.user.username, style: GoogleFonts.quicksand(color: activeTheme.text2, fontSize: textSize3 * 0.8, fontWeight: FontWeight.w600)),
+                Text(widget.user.email, style: GoogleFonts.quicksand(color: activeTheme.text2, fontSize: textSize3 * 0.8, fontWeight: FontWeight.w600)),
               ],
             ),
           ),
@@ -132,10 +119,7 @@ class _ProfileWidgetState extends ConsumerState<ProfileWidget> with SingleTicker
           // TabBar
           TabBar(
             controller: tabController,
-            indicator: UnderlineTabIndicator(
-              borderSide: BorderSide(width: 4, color: activeTheme.text2),
-              borderRadius: const BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-            ),
+            indicator: UnderlineTabIndicator(borderSide: BorderSide(width: 4, color: activeTheme.text2), borderRadius: const BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
             dividerColor: activeTheme.text2.withAlpha(128),
             dividerHeight: 0,
             tabs: [
@@ -147,18 +131,7 @@ class _ProfileWidgetState extends ConsumerState<ProfileWidget> with SingleTicker
           ),
 
           // TabBarView
-          Expanded(
-            child: TabBarView(
-              physics: const BouncingScrollPhysics(),
-              controller: tabController,
-              children: [
-                const MediaTabWidget(),
-                const BookmarksTabWidget(),
-                const PostsTabWidget(),
-                const CommentsTabWidget(),
-              ],
-            ),
-          ),
+          Expanded(child: TabBarView(physics: const BouncingScrollPhysics(), controller: tabController, children: [const MediaTabWidget(), const BookmarksTabWidget(), const PostsTabWidget(), const CommentsTabWidget()])),
         ],
       ),
     );
@@ -181,7 +154,7 @@ class MediaTabWidget extends ConsumerWidget {
     //final double textSize2 = dimensions.textSize2;
     //final double textSize3 = dimensions.textSize3;
     //final double cornerRadius1 = dimensions.cornerRadius1;
-    log('!!! building MediaTabWidget widgets...');
+    myLogger.d('building MediaTabWidget widgets...');
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
@@ -189,11 +162,7 @@ class MediaTabWidget extends ConsumerWidget {
           itemCount: 8,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 0, mainAxisSpacing: 0),
           itemBuilder: (context, index) {
-            return Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(color: currentTheme.foreground1, border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1)),
-              child: Icon(Icons.image_rounded, color: currentTheme.text2, size: 36),
-            );
+            return Container(alignment: Alignment.center, decoration: BoxDecoration(color: currentTheme.foreground1, border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1)), child: Icon(Icons.image_rounded, color: currentTheme.text2, size: 36));
           },
         ),
       ],
@@ -217,7 +186,7 @@ class BookmarksTabWidget extends ConsumerWidget {
     //final double textSize2 = dimensions.textSize2;
     //final double textSize3 = dimensions.textSize3;
     //final double cornerRadius1 = dimensions.cornerRadius1;
-    log('!!! building BookmarksTabWidget widgets...');
+    myLogger.d('building BookmarksTabWidget widgets...');
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
@@ -225,11 +194,7 @@ class BookmarksTabWidget extends ConsumerWidget {
           itemCount: 8,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 0, mainAxisSpacing: 0),
           itemBuilder: (context, index) {
-            return Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(color: currentTheme.foreground1, border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1)),
-              child: Icon(Icons.bookmark_rounded, color: currentTheme.text2, size: 36),
-            );
+            return Container(alignment: Alignment.center, decoration: BoxDecoration(color: currentTheme.foreground1, border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1)), child: Icon(Icons.bookmark_rounded, color: currentTheme.text2, size: 36));
           },
         ),
       ],
@@ -253,7 +218,7 @@ class PostsTabWidget extends ConsumerWidget {
     //final double textSize2 = dimensions.textSize2;
     //final double textSize3 = dimensions.textSize3;
     //final double cornerRadius1 = dimensions.cornerRadius1;
-    log('!!! building PostsTabWidget widgets...');
+    myLogger.d('building PostsTabWidget widgets...');
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
@@ -261,11 +226,7 @@ class PostsTabWidget extends ConsumerWidget {
           itemCount: 8,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 0, mainAxisSpacing: 0),
           itemBuilder: (context, index) {
-            return Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(color: currentTheme.foreground1, border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1)),
-              child: Icon(Icons.message_rounded, color: currentTheme.text2, size: 36),
-            );
+            return Container(alignment: Alignment.center, decoration: BoxDecoration(color: currentTheme.foreground1, border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1)), child: Icon(Icons.message_rounded, color: currentTheme.text2, size: 36));
           },
         ),
       ],
@@ -289,7 +250,7 @@ class CommentsTabWidget extends ConsumerWidget {
     //final double textSize2 = dimensions.textSize2;
     //final double textSize3 = dimensions.textSize3;
     //final double cornerRadius1 = dimensions.cornerRadius1;
-    log('!!! building CommentsTabWidget widgets...');
+    myLogger.d('building CommentsTabWidget widgets...');
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
@@ -297,11 +258,7 @@ class CommentsTabWidget extends ConsumerWidget {
           itemCount: 8,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 0, mainAxisSpacing: 0),
           itemBuilder: (context, index) {
-            return Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(color: currentTheme.foreground1, border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1)),
-              child: Icon(Icons.comment_rounded, color: currentTheme.text2, size: 36),
-            );
+            return Container(alignment: Alignment.center, decoration: BoxDecoration(color: currentTheme.foreground1, border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1)), child: Icon(Icons.comment_rounded, color: currentTheme.text2, size: 36));
           },
         ),
       ],
@@ -314,15 +271,12 @@ class ProfileSkeletonWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    log('!!! building skeleton widgets...');
+    myLogger.d('building skeleton widgets...');
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ElevatedButton(onPressed: () => Navigator.pushNamed(context, '/auth/login'), child: const Text('Sign In')),
-            ElevatedButton(onPressed: () => Navigator.pushNamed(context, '/auth/register'), child: const Text('Sign Up')),
-          ],
+          children: [ElevatedButton(onPressed: () => Navigator.pushNamed(context, '/auth/login'), child: const Text('Sign In')), ElevatedButton(onPressed: () => Navigator.pushNamed(context, '/auth/register'), child: const Text('Sign Up'))],
         ),
       ],
     );

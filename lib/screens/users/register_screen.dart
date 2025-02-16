@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:kronk/utility/dimensions.dart';
 import 'package:kronk/utility/extensions.dart';
+import 'package:kronk/utility/my_logger.dart';
 import 'package:kronk/widgets/auth_widgets/auth_fields.dart';
 import 'package:kronk/widgets/my_theme.dart';
 import '../../bloc/authentication/authentication_bloc.dart';
@@ -86,6 +87,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           } catch (error) {
             log('unexpected error while routing in register_screen: $error');
           }
+        } else if (state is GoogleAuthenticationSuccess) {
+          myLogger.i('google auth successfully done!!!');
+          Navigator.pushReplacementNamed(context, '/settings');
         } else if (state is AuthenticationFailure) {
           logger.w('*** Social Auth AuthenticationFailure!!!');
           ScaffoldMessenger.of(context).showSnackBar(

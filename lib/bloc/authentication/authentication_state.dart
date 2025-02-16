@@ -13,6 +13,8 @@ class AuthenticationLoading extends AuthenticationState {}
 
 class AuthenticationSuccess extends AuthenticationState {}
 
+class GoogleAuthenticationSuccess extends AuthenticationState {}
+
 class AuthenticationFailure extends AuthenticationState {
   final String? failureMessage;
 

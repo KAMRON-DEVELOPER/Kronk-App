@@ -107,7 +107,7 @@ class UsersService {
     try {
       _dio.interceptors.add(AccessTokenInterceptor());
       final response = await _dio.get('/profile');
-      myLogger.i('🚀 response.data in fetchProfile: ${response.data}  statusCode: ${response.statusCode}');
+      myLogger.d('1. response.data in fetchProfile: ${response.data} ### statusCode: ${response.statusCode}');
       return response;
     } catch (error) {
       myLogger.w('🌋 catch in fetchUserProfile: ${error.toString()}');
@@ -126,15 +126,26 @@ class UsersService {
     }
   }
 
-  Future<Response?> fetchSocialAuth({required String? firebaseUserIdToken}) async {
+  Future<Response?> fetchGoogleAuth({required String? firebaseUserIdToken}) async {
     try {
       _dio.interceptors.add(FirebaseIdTokenInterceptor(firebaseIdToken: firebaseUserIdToken));
-      Response response = await _dio.post('/social-auth');
+      Response response = await _dio.post('/google-auth');
       myLogger.i('🚀 response.data in fetchSocialAuth: ${response.data}  statusCode: ${response.statusCode}');
       return response;
     } catch (error) {
       myLogger.w('🥶 Error in fetchSocialAuth: ${error.toString()}');
       return null;
+    }
+  }
+
+  Future<void> fetchLogout() async {
+    try {
+      _dio.interceptors.add(AccessTokenInterceptor());
+      Response response = await _dio.post('/logout');
+      myLogger.d('response.statusCode: ${response.statusCode}');
+      myLogger.d('response.data: ${response.data}, data.runtimeType: ${response.data.runtimeType}');
+    } catch (e) {
+      myLogger.f('Something happend in fetchLogout...');
     }
   }
 

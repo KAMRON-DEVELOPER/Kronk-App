@@ -19,7 +19,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     on<LoginSubmitEvent>(_loginSubmitEvent);
     on<RequestResetPasswordEvent>(_requestResetPasswordEvent);
     on<ResetPasswordEvent>(_resetPasswordEvent);
-    on<SocialAuthEvent>(_socialAuthEvent);
+    on<SocialAuthEvent>(_googleAuthEvent);
   }
 
   Future<void> _registerSubmitEvent(RegisterSubmitEvent event, Emitter<AuthenticationState> emit) async {
@@ -88,15 +88,17 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     );
   }
 
-  Future<void> _socialAuthEvent(SocialAuthEvent event, Emitter<AuthenticationState> emit) async {
+  Future<void> _googleAuthEvent(SocialAuthEvent event, Emitter<AuthenticationState> emit) async {
     final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
     emit(AuthenticationLoading());
 
     try {
-      final User? firebaseUser = firebaseAuth.currentUser;
+      // Check if the user is already signed in
+      User? firebaseUser = firebaseAuth.currentUser;
 
-      if (firebaseUser != null) {
+      // If the user is not signed in, initiate Google Sign-In
+      if (firebaseUser == null) {
         myLogger.i('firebaseUser is null and we need to authenticate it.');
         final GoogleSignInAccount? googleSignInAccount = await GoogleSignIn().signIn();
 
@@ -108,29 +110,27 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
         final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
         final OAuthCredential oAuthCredential = GoogleAuthProvider.credential(idToken: googleSignInAuthentication.idToken, accessToken: googleSignInAuthentication.accessToken);
 
-        await firebaseAuth.signInWithCredential(oAuthCredential);
-        User? firebaseUser = firebaseAuth.currentUser;
+        // Sign in to Firebase with Google credentials
+        final UserCredential userCredential = await firebaseAuth.signInWithCredential(oAuthCredential);
+        firebaseUser = userCredential.user;
 
         if (firebaseUser == null) {
-          emit(const AuthenticationFailure(failureMessage: '🥶 Error occurred while sign in to firebase.'));
+          emit(const AuthenticationFailure(failureMessage: '🥶 Error occurred while signing in to Firebase.'));
           return;
         }
       }
 
-      String? firebaseUserIdToken = await firebaseUser!.getIdToken();
+      // Get the Firebase user ID token
+      String? firebaseUserIdToken = await firebaseUser.getIdToken();
 
-      Response? response = await _authApiService.fetchSocialAuth(firebaseUserIdToken: firebaseUserIdToken);
+      // Call your API service for social authentication
+      Response? response = await _authApiService.fetchGoogleAuth(firebaseUserIdToken: firebaseUserIdToken);
       if (response != null && response.statusCode! < 400) {
         myLogger.i('🚀 social auth is success!: response.data: ${response.data}, runtimeType: ${response.data.runtimeType}');
-        final newMap = {...(response.data as Map<String, dynamic>)};
-        print('New Map: $newMap');
 
-        final finalDataToStore = {...(response.data as Map<String, dynamic>), 'isDoneSplash': true, 'isAuthenticated': true};
-        print('finalDataToStore: $finalDataToStore');
-        await _storage.setAsyncSettingsAll(finalDataToStore);
-        await _storage.setAsyncUser(user: UserModel.fromJson(response.data));
+        await _storage.setAsyncSettingsAll({...response.data, 'isDoneSplash': true, 'isAuthenticated': true});
 
-        emit(AuthenticationSuccess());
+        emit(GoogleAuthenticationSuccess());
         return;
       }
       myLogger.w('🎃 social auth is failed!');

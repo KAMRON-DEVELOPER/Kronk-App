@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:kronk/utility/my_logger.dart';
 import 'package:kronk/widgets/my_theme.dart';
 import 'package:tuple/tuple.dart';
 import '../models/navbar_model.dart';
@@ -12,10 +12,7 @@ class Storage {
   final Box<UserModel?> userBox;
   final Box settingsBox;
 
-  Storage()
-      : navbarBox = Hive.box<NavbarModel>('navbarBox'),
-        userBox = Hive.box<UserModel>('userBox'),
-        settingsBox = Hive.box('settingsBox');
+  Storage() : navbarBox = Hive.box<NavbarModel>('navbarBox'), userBox = Hive.box<UserModel>('userBox'), settingsBox = Hive.box('settingsBox');
 
   ThemeName getActiveThemeName() {
     final themeNameString = settingsBox.get('activeThemeName', defaultValue: ThemeName.auto.toString());
@@ -50,7 +47,7 @@ class Storage {
     navbarItems.insert(newIndex, reorderedItem);
 
     final navbarItemsTolog = navbarItems.map((item) => item.route).toList();
-    log('!!! navbarItemsTolog in Storage: $navbarItemsTolog', level: 800);
+    myLogger.i('!!! navbarItemsTolog in Storage: $navbarItemsTolog');
 
     await navbarBox.clear();
     await navbarBox.addAll(navbarItems);
@@ -64,9 +61,9 @@ class Storage {
     List<String> keys = ['isDoneSplash', 'isDoneServices', 'isAuthenticated', 'access_token', 'refresh_token', 'verify_token', 'verify_token_expiration_date', 'reset_password_token', 'reset_password_token_expiration_date'];
     await settingsBox.deleteAll(keys);
     await userBox.delete('user');
-    log('🚧 before deleting everything from navbarBox: ${navbarBox.values.toList()}');
+    myLogger.d('🚧 before deleting(logout) everything from navbarBox: ${navbarBox.values.toList()}');
     await navbarBox.clear();
-    log('🚧 after deleting everything from navbarBox: ${navbarBox.values.toList()}');
+    myLogger.d('🚧 after deleting(logout) everything from navbarBox: ${navbarBox.values.toList()}');
   }
 
   String getFirstRoute() => navbarBox.values.whereType<NavbarModel>().where((NavbarModel navbarItem) => navbarItem.isEnabled).toList().first.route;

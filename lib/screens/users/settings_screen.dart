@@ -321,7 +321,7 @@ class SupportSectionWidget extends ConsumerWidget {
                   myLogger.w('!!! whenComplete worked in buy me a coffee');
                 });
           },
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.yellowAccent, fixedSize: Size(contentWidth1, buttonHeight1), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(cornerRadius1))),
+          style: ElevatedButton.styleFrom(backgroundColor: const Color(0xff4C66CC), fixedSize: Size(contentWidth1, buttonHeight1), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(cornerRadius1))),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [SvgPicture.asset('assets/icons/others/buy_me_a_coffe.svg'), Text('Buy me a coffe', style: GoogleFonts.pacifico(color: currentTheme.background1, fontSize: 24, fontWeight: FontWeight.w600)), const SizedBox(width: 24)],

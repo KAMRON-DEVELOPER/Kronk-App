@@ -79,10 +79,10 @@ class UserModel extends HiveObject {
       gender: json['gender'],
       country: json['country'],
       stateOrProvince: json['state_or_province'],
-      isAdmin: json['is_admin'],
-      isBlocked: json['is_blocked'],
-      followersCount: json['followers_count'],
-      followingsCount: json['followings_count'],
+      isAdmin: json['is_admin'] ?? false,
+      isBlocked: json['is_blocked'] ?? false,
+      followersCount: json['followers_count'] ?? 0,
+      followingsCount: json['followings_count'] ?? 0,
     );
   }
 
