@@ -21,6 +21,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, title: 'Kronk', initialRoute: initialRoute, onGenerateRoute: (RouteSettings settings) => routes(settings, context));
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Kronk',
+      initialRoute: initialRoute,
+      onGenerateRoute: (RouteSettings settings) => routes(settings, context),
+    );
+  }
+}
+
+class MyTestWidget extends StatefulWidget {
+  const MyTestWidget({super.key});
+
+  @override
+  State<MyTestWidget> createState() => _MyTestWidgetState();
+}
+
+class _MyTestWidgetState extends State<MyTestWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return const SafeArea(child: Scaffold(body: Column()));
   }
 }

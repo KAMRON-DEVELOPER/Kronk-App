@@ -18,11 +18,8 @@ class Navbar extends ConsumerWidget {
     final int activeIndex = ref.watch(activeIndexProvider);
 
     return Container(
-      height: 64,
-      decoration: BoxDecoration(
-        color: activeTheme.background1,
-        border: Border(top: BorderSide(color: activeTheme.text3.withAlpha(36), width: 0.5)),
-      ),
+      height: 52,
+      decoration: BoxDecoration(color: activeTheme.background1, border: Border(top: BorderSide(color: activeTheme.text2.withAlpha(128), width: 0.1))),
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           final double spacing = (constraints.maxWidth - enabledNavbarItems.length * 32) / (enabledNavbarItems.length + 1);
@@ -32,20 +29,21 @@ class Navbar extends ConsumerWidget {
             padding: EdgeInsets.symmetric(horizontal: spacing),
             itemCount: enabledNavbarItems.length,
             separatorBuilder: (BuildContext context, int index) => SizedBox(width: spacing),
-            itemBuilder: (BuildContext context, int index) => SizedBox(
-              width: 32,
-              child: GestureDetector(
-                onLongPress: () => Navigator.pushNamed(context, '/settings'),
-                onTap: () {
-                  ref.read(activeIndexProvider.notifier).state = index;
-                  Navigator.pushReplacementNamed(context, enabledNavbarItems[index].route);
-                },
-                child: SvgPicture.asset(
-                  activeIndex == index ? enabledNavbarItems[index].activeSVGPath : enabledNavbarItems[index].svgPath,
-                  colorFilter: ColorFilter.mode(activeIndex == index ? activeTheme.text3 : activeTheme.text2.withAlpha(128), BlendMode.srcIn),
+            itemBuilder:
+                (BuildContext context, int index) => SizedBox(
+                  width: 32,
+                  child: GestureDetector(
+                    onLongPress: () => Navigator.pushNamed(context, '/settings'),
+                    onTap: () {
+                      ref.read(activeIndexProvider.notifier).state = index;
+                      Navigator.pushReplacementNamed(context, enabledNavbarItems[index].route);
+                    },
+                    child: SvgPicture.asset(
+                      activeIndex == index ? enabledNavbarItems[index].activeSVGPath : enabledNavbarItems[index].svgPath,
+                      colorFilter: ColorFilter.mode(activeIndex == index ? activeTheme.text3 : activeTheme.text2.withAlpha(128), BlendMode.srcIn),
+                    ),
+                  ),
                 ),
-              ),
-            ),
           );
         },
       ),

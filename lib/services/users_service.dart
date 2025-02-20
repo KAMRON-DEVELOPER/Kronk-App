@@ -5,15 +5,19 @@ import 'package:tuple/tuple.dart';
 import '../models/user_model.dart';
 import '../utility/interceptors.dart';
 
-BaseOptions getBaseOptions() {
-  return BaseOptions(baseUrl: 'http://192.168.31.43:8000/users', contentType: 'application/json', validateStatus: (int? status) => true);
+BaseOptions getUsersBaseOptions() {
+  return BaseOptions(
+    baseUrl: 'http://192.168.31.43:8000/users',
+    contentType: 'application/json',
+    validateStatus: (int? status) => true,
+  );
 }
 
 class UsersService {
   final Dio _dio;
   final Storage _storage;
 
-  UsersService() : _dio = Dio(getBaseOptions()), _storage = Storage();
+  UsersService() : _dio = Dio(getUsersBaseOptions()), _storage = Storage();
 
   Future<Response?> fetchRegister({required Map<String, String> registerData}) async {
     try {
@@ -94,7 +98,10 @@ class UsersService {
 
   Future<Response?> fetchRefreshTokens({required String refreshToken}) async {
     try {
-      Response response = await _dio.post('/refresh', options: Options(headers: {'Authorization': 'Bearer $refreshToken'}));
+      Response response = await _dio.post(
+        '/refresh',
+        options: Options(headers: {'Authorization': 'Bearer $refreshToken'}),
+      );
       myLogger.i('🚀 response.data in fetchRefreshTokens: ${response.data}  statusCode: ${response.statusCode}');
       return response;
     } catch (error) {
@@ -129,7 +136,7 @@ class UsersService {
   Future<Response?> fetchGoogleAuth({required String? firebaseUserIdToken}) async {
     try {
       _dio.interceptors.add(FirebaseIdTokenInterceptor(firebaseIdToken: firebaseUserIdToken));
-      Response response = await _dio.post('/google-auth');
+      Response response = await _dio.post('/google_auth');
       myLogger.i('🚀 response.data in fetchSocialAuth: ${response.data}  statusCode: ${response.statusCode}');
       return response;
     } catch (error) {
@@ -145,7 +152,7 @@ class UsersService {
       myLogger.d('response.statusCode: ${response.statusCode}');
       myLogger.d('response.data: ${response.data}, data.runtimeType: ${response.data.runtimeType}');
     } catch (e) {
-      myLogger.f('Something happend in fetchLogout...');
+      myLogger.f('Something happened in fetchLogout...');
     }
   }
 

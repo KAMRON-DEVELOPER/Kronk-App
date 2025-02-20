@@ -35,12 +35,19 @@ class ProfileScreen extends ConsumerWidget {
         backgroundColor: activeTheme.background1,
         title: Text('Profile', style: TextStyle(color: activeTheme.text3)),
         centerTitle: true,
-        actions: [IconButton(icon: Icon(Icons.settings, color: activeTheme.text2), onPressed: () => Navigator.pushNamed(context, '/settings'))],
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings, color: activeTheme.text2),
+            onPressed: () => Navigator.pushNamed(context, '/settings'),
+          ),
+        ],
       ),
       body: asyncUser.when(
         data: (UserModel? user) => user != null ? ProfileWidget(user: user) : const ProfileSkeletonWidget(),
         loading: () => const ProfileSkeletonWidget(),
-        error: (Object error, StackTrace _) => Center(child: Text('Error: $error', style: TextStyle(color: activeTheme.text3))),
+        error:
+            (Object error, StackTrace _) =>
+                Center(child: Text('Error: $error', style: TextStyle(color: activeTheme.text3))),
       ),
       bottomNavigationBar: const Navbar(),
     );
@@ -49,6 +56,7 @@ class ProfileScreen extends ConsumerWidget {
 
 class ProfileWidget extends ConsumerStatefulWidget {
   final UserModel user;
+
   const ProfileWidget({super.key, required this.user});
 
   @override
@@ -93,25 +101,49 @@ class _ProfileWidgetState extends ConsumerState<ProfileWidget> with SingleTicker
           // profile info
           Container(
             width: contentWidth2,
-            decoration: BoxDecoration(color: activeTheme.foreground1, borderRadius: BorderRadius.circular(cornerRadius1)),
+            decoration: BoxDecoration(
+              color: activeTheme.foreground1,
+              borderRadius: BorderRadius.circular(cornerRadius1),
+            ),
             child: Column(
               children: [
                 CircleAvatar(
                   radius: 48,
                   child: CachedNetworkImage(
-                    imageUrl: 'http://192.168.31.43:9000/dev-bucket/${widget.user.avatar ?? 'defaults/default-avatar.jpg'}',
+                    imageUrl:
+                        'http://192.168.31.43:9000/dev-bucket/${widget.user.avatar ?? 'defaults/default-avatar.jpg'}',
                     fit: BoxFit.cover,
                     width: 96,
                     height: 96,
                     memCacheHeight: 96.cacheSize(context),
                     memCacheWidth: 96.cacheSize(context),
-                    imageBuilder: (context, imageProvider) => Container(decoration: BoxDecoration(shape: BoxShape.circle, image: DecorationImage(image: imageProvider, fit: BoxFit.cover, isAntiAlias: true))),
+                    imageBuilder:
+                        (context, imageProvider) => Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(image: imageProvider, fit: BoxFit.cover, isAntiAlias: true),
+                          ),
+                        ),
                     placeholder: (context, url) => CircularProgressIndicator(color: activeTheme.text2, strokeWidth: 2),
                     errorWidget: (context, url, error) => const Icon(Icons.error, size: 98, color: Colors.redAccent),
                   ),
                 ),
-                Text(widget.user.username, style: GoogleFonts.quicksand(color: activeTheme.text2, fontSize: textSize3 * 0.8, fontWeight: FontWeight.w600)),
-                Text(widget.user.email, style: GoogleFonts.quicksand(color: activeTheme.text2, fontSize: textSize3 * 0.8, fontWeight: FontWeight.w600)),
+                Text(
+                  widget.user.username,
+                  style: GoogleFonts.quicksand(
+                    color: activeTheme.text2,
+                    fontSize: textSize3 * 0.8,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  widget.user.email,
+                  style: GoogleFonts.quicksand(
+                    color: activeTheme.text2,
+                    fontSize: textSize3 * 0.8,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ],
             ),
           ),
@@ -119,7 +151,10 @@ class _ProfileWidgetState extends ConsumerState<ProfileWidget> with SingleTicker
           // TabBar
           TabBar(
             controller: tabController,
-            indicator: UnderlineTabIndicator(borderSide: BorderSide(width: 4, color: activeTheme.text2), borderRadius: const BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+            indicator: UnderlineTabIndicator(
+              borderSide: BorderSide(width: 4, color: activeTheme.text2),
+              borderRadius: const BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+            ),
             dividerColor: activeTheme.text2.withAlpha(128),
             dividerHeight: 0,
             tabs: [
@@ -131,7 +166,18 @@ class _ProfileWidgetState extends ConsumerState<ProfileWidget> with SingleTicker
           ),
 
           // TabBarView
-          Expanded(child: TabBarView(physics: const BouncingScrollPhysics(), controller: tabController, children: [const MediaTabWidget(), const BookmarksTabWidget(), const PostsTabWidget(), const CommentsTabWidget()])),
+          Expanded(
+            child: TabBarView(
+              physics: const BouncingScrollPhysics(),
+              controller: tabController,
+              children: [
+                const MediaTabWidget(),
+                const BookmarksTabWidget(),
+                const PostsTabWidget(),
+                const CommentsTabWidget(),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -160,9 +206,20 @@ class MediaTabWidget extends ConsumerWidget {
       slivers: [
         SliverGrid.builder(
           itemCount: 8,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 0, mainAxisSpacing: 0),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 0,
+            mainAxisSpacing: 0,
+          ),
           itemBuilder: (context, index) {
-            return Container(alignment: Alignment.center, decoration: BoxDecoration(color: currentTheme.foreground1, border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1)), child: Icon(Icons.image_rounded, color: currentTheme.text2, size: 36));
+            return Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: currentTheme.foreground1,
+                border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1),
+              ),
+              child: Icon(Icons.image_rounded, color: currentTheme.text2, size: 36),
+            );
           },
         ),
       ],
@@ -192,9 +249,20 @@ class BookmarksTabWidget extends ConsumerWidget {
       slivers: [
         SliverGrid.builder(
           itemCount: 8,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 0, mainAxisSpacing: 0),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 0,
+            mainAxisSpacing: 0,
+          ),
           itemBuilder: (context, index) {
-            return Container(alignment: Alignment.center, decoration: BoxDecoration(color: currentTheme.foreground1, border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1)), child: Icon(Icons.bookmark_rounded, color: currentTheme.text2, size: 36));
+            return Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: currentTheme.foreground1,
+                border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1),
+              ),
+              child: Icon(Icons.bookmark_rounded, color: currentTheme.text2, size: 36),
+            );
           },
         ),
       ],
@@ -224,9 +292,20 @@ class PostsTabWidget extends ConsumerWidget {
       slivers: [
         SliverGrid.builder(
           itemCount: 8,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 0, mainAxisSpacing: 0),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 0,
+            mainAxisSpacing: 0,
+          ),
           itemBuilder: (context, index) {
-            return Container(alignment: Alignment.center, decoration: BoxDecoration(color: currentTheme.foreground1, border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1)), child: Icon(Icons.message_rounded, color: currentTheme.text2, size: 36));
+            return Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: currentTheme.foreground1,
+                border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1),
+              ),
+              child: Icon(Icons.message_rounded, color: currentTheme.text2, size: 36),
+            );
           },
         ),
       ],
@@ -256,9 +335,20 @@ class CommentsTabWidget extends ConsumerWidget {
       slivers: [
         SliverGrid.builder(
           itemCount: 8,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 0, mainAxisSpacing: 0),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 0,
+            mainAxisSpacing: 0,
+          ),
           itemBuilder: (context, index) {
-            return Container(alignment: Alignment.center, decoration: BoxDecoration(color: currentTheme.foreground1, border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1)), child: Icon(Icons.comment_rounded, color: currentTheme.text2, size: 36));
+            return Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: currentTheme.foreground1,
+                border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1),
+              ),
+              child: Icon(Icons.comment_rounded, color: currentTheme.text2, size: 36),
+            );
           },
         ),
       ],
@@ -276,7 +366,13 @@ class ProfileSkeletonWidget extends ConsumerWidget {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [ElevatedButton(onPressed: () => Navigator.pushNamed(context, '/auth/login'), child: const Text('Sign In')), ElevatedButton(onPressed: () => Navigator.pushNamed(context, '/auth/register'), child: const Text('Sign Up'))],
+          children: [
+            ElevatedButton(onPressed: () => Navigator.pushNamed(context, '/auth/login'), child: const Text('Sign In')),
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/auth/register'),
+              child: const Text('Sign Up'),
+            ),
+          ],
         ),
       ],
     );
