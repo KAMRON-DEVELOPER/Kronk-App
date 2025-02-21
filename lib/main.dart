@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:kronk/riverpod/theme_notifier_provider.dart';
+import 'package:kronk/utility/dimensions.dart';
 import 'package:kronk/utility/routes.dart';
 import 'package:kronk/utility/setup.dart';
+import 'package:kronk/widgets/my_theme.dart';
 
 void main() async {
   String initialRoute = await setup();
@@ -14,32 +18,80 @@ void main() async {
   runApp(ProviderScope(child: MyApp(initialRoute: initialRoute)));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   final String initialRoute;
 
   const MyApp({super.key, required this.initialRoute});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final MyTheme activeTheme = ref.watch(themeNotifierProvider);
+    final Dimensions dimensions = Dimensions.of(context);
+
+    // final double contentWidth2 = dimensions.contentWidth2;
+    final double globalMargin2 = dimensions.globalMargin2;
+    // final double buttonHeight1 = dimensions.buttonHeight1;
+    // final double textSize1 = dimensions.textSize1;
+    // final double textSize2 = dimensions.textSize2;
+    final double textSize3 = dimensions.textSize3;
+    // final double cornerRadius1 = dimensions.cornerRadius1;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Kronk',
       initialRoute: initialRoute,
+
+      theme: ThemeData(
+        splashFactory: NoSplash.splashFactory,
+        scaffoldBackgroundColor: activeTheme.background1,
+        textTheme: TextTheme(
+          displayLarge: GoogleFonts.quicksand(fontSize: 44, color: activeTheme.text2, fontWeight: FontWeight.bold),
+          displayMedium: GoogleFonts.quicksand(fontSize: 28, color: activeTheme.text2, fontWeight: FontWeight.w600),
+          displaySmall: GoogleFonts.quicksand(fontSize: textSize3, color: activeTheme.text2, fontWeight: FontWeight.w600),
+          bodyLarge: GoogleFonts.quicksand(fontSize: 24, color: activeTheme.text2),
+          bodyMedium: GoogleFonts.quicksand(fontSize: 18, color: activeTheme.text2),
+          bodySmall: GoogleFonts.quicksand(fontSize: 14, color: activeTheme.text2.withAlpha(128)),
+          titleLarge: GoogleFonts.quicksand(fontSize: 24, color: activeTheme.text2),
+          labelLarge: GoogleFonts.quicksand(fontSize: 24, color: Colors.purpleAccent),
+          headlineLarge: GoogleFonts.quicksand(fontSize: 24, color: Colors.red),
+        ),
+        appBarTheme: AppBarTheme(
+          backgroundColor: activeTheme.background1,
+          surfaceTintColor: activeTheme.background1,
+          centerTitle: true,
+          titleTextStyle: GoogleFonts.quicksand(color: activeTheme.text2, fontSize: 24, fontWeight: FontWeight.w600),
+          actionsPadding: EdgeInsets.only(right: globalMargin2),
+          iconTheme: IconThemeData(color: activeTheme.text2, size: 28),
+        ),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: activeTheme.foreground1,
+          foregroundColor: activeTheme.text2,
+          shape: const CircleBorder(),
+          iconSize: 36,
+        ),
+        tabBarTheme: TabBarTheme(
+          splashFactory: NoSplash.splashFactory,
+          overlayColor: WidgetStatePropertyAll(activeTheme.background1),
+          indicatorAnimation: TabIndicatorAnimation.linear,
+          dividerHeight: 0.1,
+          dividerColor: activeTheme.text2.withAlpha(128),
+          indicatorSize: TabBarIndicatorSize.tab,
+          indicator: UnderlineTabIndicator(
+            insets: EdgeInsets.symmetric(horizontal: globalMargin2),
+            borderSide: BorderSide(width: 4, color: activeTheme.text2),
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(2), topRight: Radius.circular(2)),
+          ),
+          labelColor: activeTheme.text2,
+          unselectedLabelColor: activeTheme.text2.withAlpha(128),
+          labelStyle: GoogleFonts.quicksand(textStyle: TextStyle(fontSize: textSize3, fontWeight: FontWeight.w600)),
+          unselectedLabelStyle: GoogleFonts.quicksand(textStyle: TextStyle(fontSize: textSize3, fontWeight: FontWeight.w600)),
+        ),
+        progressIndicatorTheme: ProgressIndicatorThemeData(color: activeTheme.text2, borderRadius: BorderRadius.circular(8)),
+        textSelectionTheme: TextSelectionThemeData(selectionHandleColor: activeTheme.text2),
+        iconTheme: const IconThemeData(color: Colors.greenAccent),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(backgroundColor: Colors.red),
+      ),
+
       onGenerateRoute: (RouteSettings settings) => routes(settings, context),
     );
-  }
-}
-
-class MyTestWidget extends StatefulWidget {
-  const MyTestWidget({super.key});
-
-  @override
-  State<MyTestWidget> createState() => _MyTestWidgetState();
-}
-
-class _MyTestWidgetState extends State<MyTestWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return const SafeArea(child: Scaffold(body: Column()));
   }
 }

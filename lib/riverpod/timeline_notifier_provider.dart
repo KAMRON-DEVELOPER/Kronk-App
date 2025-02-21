@@ -24,7 +24,7 @@ class HomeTimelineNotifier extends AutoDisposeAsyncNotifier<List<PostModel>> {
 
   Future<List<PostModel>> _fetchHomeTimelinePosts() async {
     try {
-      //await Future.delayed(const Duration(seconds: 3)); // Simulating server delay
+      // await Future.delayed(const Duration(seconds: 120)); // Simulating server delay
 
       List<ConnectivityResult> initialResults = await _connectivity.checkConnectivity();
       bool isOnline = initialResults.any((ConnectivityResult result) => result != ConnectivityResult.none);
@@ -53,6 +53,21 @@ class HomeTimelineNotifier extends AutoDisposeAsyncNotifier<List<PostModel>> {
     } catch (e, stacktrace) {
       myLogger.e('💀 Unexpected error in _fetchProfile: $e \nStacktrace: $stacktrace');
       return [];
+    }
+  }
+
+  Future<void> fetchCreatePost({required PostModel postData}) async {
+    try {
+      List<ConnectivityResult> initialResults = await _connectivity.checkConnectivity();
+      bool isOnline = initialResults.any((ConnectivityResult result) => result != ConnectivityResult.none);
+      bool isAuthenticated = await _storage.getAsyncSettings(key: 'isAuthenticated', defaultValue: false);
+
+      if (isAuthenticated && isOnline) {
+        Response? response = await _communityServices.fetchCreatePost(postData: postData);
+        myLogger.d('response.data: ${response?.data}, statusCode: ${response?.statusCode}');
+      }
+    } catch (e, stacktrace) {
+      myLogger.e('💀 Unexpected error in fetchCreatePost: $e \nStacktrace: $stacktrace');
     }
   }
 }

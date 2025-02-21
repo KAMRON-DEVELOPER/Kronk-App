@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:kronk/models/post_model.dart';
 import 'package:kronk/utility/my_logger.dart';
 import '../utility/interceptors.dart';
 
@@ -31,6 +32,18 @@ class CommunityServices {
       return response;
     } catch (error) {
       myLogger.w('🌋 catch in fetchGlobalTimeline: ${error.toString()}');
+      return null;
+    }
+  }
+
+  Future<Response?> fetchCreatePost({required PostModel postData}) async {
+    try {
+      _dio.interceptors.add(AccessTokenInterceptor());
+      Response response = await _dio.post('/posts', data: postData);
+      myLogger.i('🚀 response.data in fetchCreatePost: ${response.data}  statusCode: ${response.statusCode}');
+      return response;
+    } catch (error) {
+      myLogger.w('🌋 catch in fetchCreatePost: ${error.toString()}');
       return null;
     }
   }

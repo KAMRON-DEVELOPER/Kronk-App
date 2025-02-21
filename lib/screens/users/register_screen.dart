@@ -10,6 +10,7 @@ import 'package:kronk/utility/extensions.dart';
 import 'package:kronk/utility/my_logger.dart';
 import 'package:kronk/widgets/auth_widgets/auth_fields.dart';
 import 'package:kronk/widgets/my_theme.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../bloc/authentication/authentication_bloc.dart';
 import '../../bloc/authentication/authentication_event.dart';
 import '../../bloc/authentication/authentication_state.dart';
@@ -116,85 +117,82 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Sign Up', style: GoogleFonts.quicksand(color: currentTheme.text2, fontSize: textSize1)),
+                    Text('Sign Up', style: Theme.of(context).textTheme.displayLarge),
                     SizedBox(height: globalMargin1),
                     AutofillGroup(
                       child: Column(
                         children: [
-                          AuthInputFieldWidget(buttonHeight: buttonHeight1, currentTheme: currentTheme, fieldName: 'username', controller: _usernameController, errorText: usernameError, onChanged: (String value) => setState(() => usernameError = value.trim().isValidUsername)),
+                          AuthInputFieldWidget(
+                            buttonHeight: buttonHeight1,
+                            currentTheme: currentTheme,
+                            fieldName: 'username',
+                            controller: _usernameController,
+                            errorText: usernameError,
+                            onChanged: (String value) => setState(() => usernameError = value.trim().isValidUsername),
+                          ),
                           SizedBox(height: globalMargin1 / 2),
-                          AuthInputFieldWidget(buttonHeight: buttonHeight1, currentTheme: currentTheme, fieldName: 'email', controller: _emailController, errorText: emailError, onChanged: (String value) => setState(() => emailError = value.trim().isValidEmail)),
+                          AuthInputFieldWidget(
+                            buttonHeight: buttonHeight1,
+                            currentTheme: currentTheme,
+                            fieldName: 'email',
+                            controller: _emailController,
+                            errorText: emailError,
+                            onChanged: (String value) => setState(() => emailError = value.trim().isValidEmail),
+                          ),
                           SizedBox(height: globalMargin1 / 2),
-                          AuthInputFieldWidget(buttonHeight: buttonHeight1, currentTheme: currentTheme, fieldName: 'password', controller: _passwordController, errorText: passwordError, onChanged: (String value) => setState(() => passwordError = value.trim().isValidPassword)),
+                          AuthInputFieldWidget(
+                            buttonHeight: buttonHeight1,
+                            currentTheme: currentTheme,
+                            fieldName: 'password',
+                            controller: _passwordController,
+                            errorText: passwordError,
+                            onChanged: (String value) => setState(() => passwordError = value.trim().isValidPassword),
+                          ),
                         ],
                       ),
                     ),
                     SizedBox(height: globalMargin1 / 2),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: [GestureDetector(onTap: () => Navigator.pushNamed(context, '/auth/request_reset_password'), child: Text('Reset password', style: GoogleFonts.quicksand(color: currentTheme.text2.withAlpha(128), fontSize: textSize3, fontWeight: FontWeight.w600)))],
+                      children: [
+                        GestureDetector(
+                          onTap: () => Navigator.pushNamed(context, '/auth/request_reset_password'),
+                          child: Text('Reset password', style: Theme.of(context).textTheme.displaySmall?.copyWith(color: currentTheme.text2.withAlpha(128))),
+                        ),
+                      ],
                     ),
                     SizedBox(height: globalMargin1 / 2),
                     ElevatedButton(
                       onPressed: () {
                         if (usernameError == null && emailError == null && passwordError == null) {
-                          final Map<String, String> registerData = {'username': _usernameController.text.trim(), 'email': _emailController.text.trim(), 'password': _passwordController.text.trim()};
+                          final Map<String, String> registerData = {
+                            'username': _usernameController.text.trim(),
+                            'email': _emailController.text.trim(),
+                            'password': _passwordController.text.trim(),
+                          };
                           context.read<AuthenticationBloc>().add(RegisterSubmitEvent(registerData: registerData));
                         }
                       },
-                      style: ElevatedButton.styleFrom(backgroundColor: currentTheme.text2, fixedSize: Size(contentWidth1, buttonHeight1), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(cornerRadius1))),
-                      child: Text((state == AuthenticationLoading() ? 'Loading...' : 'Sign Up'), style: GoogleFonts.quicksand(color: currentTheme.background1, fontSize: textSize2, fontWeight: FontWeight.w600)),
-                    ),
-                    SizedBox(height: globalMargin1),
-                    Row(
-                      children: [
-                        Expanded(child: Divider(thickness: 1, color: currentTheme.text2.withAlpha(128))),
-                        Padding(padding: const EdgeInsets.symmetric(horizontal: 8.0), child: Text('or', style: TextStyle(color: currentTheme.text2.withAlpha(128), fontSize: textSize3))),
-                        Expanded(child: Divider(thickness: 1, color: currentTheme.text2.withAlpha(128))),
-                      ],
-                    ),
-                    SizedBox(height: globalMargin1),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        OutlinedButton(
-                          onPressed: () => context.read<AuthenticationBloc>().add(SocialAuthEvent()),
-                          style: OutlinedButton.styleFrom(fixedSize: Size(contentWidth1, buttonHeight1), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(cornerRadius1)), side: BorderSide(color: currentTheme.foreground3, width: 2)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Icon(IonIcons.logo_google, size: 32, color: currentTheme.text2),
-                              const Spacer(),
-                              Text('Sign Up with Google', style: GoogleFonts.quicksand(color: currentTheme.text2, fontSize: textSize3, fontWeight: FontWeight.w600)),
-                              const Spacer(),
-                              const SizedBox(width: 32),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: globalMargin1 / 2),
-                        OutlinedButton(
-                          onPressed: () => log('Apple Auth'),
-                          style: OutlinedButton.styleFrom(fixedSize: Size(contentWidth1, buttonHeight1), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(cornerRadius1)), side: BorderSide(color: currentTheme.foreground3, width: 2)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Icon(IonIcons.logo_apple, size: 32, color: currentTheme.text2),
-                              const Spacer(),
-                              Text('Sign Up with Apple', style: GoogleFonts.quicksand(color: currentTheme.text2, fontSize: textSize3, fontWeight: FontWeight.w600)),
-                              const Spacer(),
-                              const SizedBox(width: 32),
-                            ],
-                          ),
-                        ),
-                      ],
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: currentTheme.text2,
+                        fixedSize: Size(contentWidth1, buttonHeight1),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(cornerRadius1)),
+                      ),
+                      child:
+                          state == AuthenticationLoading()
+                              ? LoadingAnimationWidget.threeArchedCircle(color: currentTheme.background1, size: 32)
+                              : Text('Sign Up', style: Theme.of(context).textTheme.displayMedium?.copyWith(color: currentTheme.background1)),
                     ),
                     SizedBox(height: globalMargin1),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Already have an account?', style: GoogleFonts.quicksand(color: currentTheme.text2.withAlpha(128), fontSize: textSize3, fontWeight: FontWeight.w600)),
+                        Text('Already have an account?', style: Theme.of(context).textTheme.displaySmall?.copyWith(color: currentTheme.text2.withAlpha(128))),
                         SizedBox(width: globalMargin1 / 4),
-                        GestureDetector(onTap: () => Navigator.pushNamed(context, '/auth/login'), child: Text('Sign In', style: GoogleFonts.quicksand(color: currentTheme.text2, fontSize: textSize3, fontWeight: FontWeight.w600))),
+                        GestureDetector(
+                          onTap: () => Navigator.pushNamed(context, '/auth/register'),
+                          child: Text('Sign In', style: Theme.of(context).textTheme.displaySmall),
+                        ),
                       ],
                     ),
                   ],

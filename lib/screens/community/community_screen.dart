@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:kronk/riverpod/timeline_notifier_provider.dart';
 import 'package:kronk/utility/dimensions.dart';
 import 'package:kronk/utility/my_logger.dart';
 import 'package:kronk/widgets/my_theme.dart';
 import 'package:kronk/widgets/navbar.dart';
+import 'package:page_transition/page_transition.dart';
 import '../../models/post_model.dart';
 import '../../riverpod/theme_notifier_provider.dart';
 
@@ -20,56 +22,29 @@ class _EducationScreenState extends ConsumerState<CommunityScreen> with Automati
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final MyTheme activeTheme = ref.watch(themeNotifierProvider);
-    final Dimensions dimensions = Dimensions.of(context);
+    // final MyTheme activeTheme = ref.watch(themeNotifierProvider);
+    // final Dimensions dimensions = Dimensions.of(context);
 
-    final double contentWidth2 = dimensions.contentWidth2;
-    final double globalMargin2 = dimensions.globalMargin2;
-    final double buttonHeight1 = dimensions.buttonHeight1;
-    final double textSize1 = dimensions.textSize1;
-    final double textSize2 = dimensions.textSize2;
-    final double textSize3 = dimensions.textSize3;
-    final double cornerRadius1 = dimensions.cornerRadius1;
+    // final double contentWidth2 = dimensions.contentWidth2;
+    // final double globalMargin2 = dimensions.globalMargin2;
+    // final double buttonHeight1 = dimensions.buttonHeight1;
+    // final double textSize1 = dimensions.textSize1;
+    // final double textSize2 = dimensions.textSize2;
+    // final double textSize3 = dimensions.textSize3;
+    // final double cornerRadius1 = dimensions.cornerRadius1;
     return Scaffold(
-      backgroundColor: activeTheme.background1,
       body: DefaultTabController(
         length: 2,
         child: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
-              SliverAppBar(
-                title: Text(
-                  'Community',
-                  style: GoogleFonts.quicksand(textStyle: TextStyle(color: activeTheme.text2, fontSize: textSize3, fontWeight: FontWeight.w600)),
-                ),
-                centerTitle: true,
-                actionsPadding: EdgeInsets.only(right: globalMargin2),
-                elevation: 0,
-                forceMaterialTransparency: true,
-                // backgroundColor: activeTheme.background1,
-                leading: Icon(Icons.menu_rounded, color: activeTheme.text2),
-                actions: [Icon(Icons.notifications_rounded, color: activeTheme.text2)],
+              const SliverAppBar(
+                title: Text('Community'),
+                leading: Icon(Icons.menu_rounded),
+                actions: [Icon(Icons.notifications_rounded)],
                 floating: true,
                 snap: true,
-                bottom: TabBar(
-                  enableFeedback: false,
-                  dividerHeight: 0.1,
-                  dividerColor: activeTheme.text2.withAlpha(128),
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  indicatorAnimation: TabIndicatorAnimation.linear,
-                  labelColor: activeTheme.text2,
-                  unselectedLabelColor: activeTheme.text2.withAlpha(128),
-                  labelStyle: GoogleFonts.quicksand(textStyle: TextStyle(color: activeTheme.text2, fontSize: textSize3, fontWeight: FontWeight.w600)),
-                  indicator: UnderlineTabIndicator(
-                    insets: EdgeInsets.symmetric(horizontal: globalMargin2),
-                    borderSide: BorderSide(width: 4, color: activeTheme.text2),
-                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(2), topRight: Radius.circular(2)),
-                  ),
-                  // indicator: BoxDecoration(
-                  //     borderRadius: BorderRadius.circular(50),
-                  //     color: Colors.greenAccent,),
-                  tabs: [const Tab(child: Text('For You')), const Tab(child: Text('Global'))],
-                ),
+                bottom: TabBar(tabs: [Tab(text: 'For You'), Tab(text: 'Global')]),
               ),
             ];
           },
@@ -77,10 +52,8 @@ class _EducationScreenState extends ConsumerState<CommunityScreen> with Automati
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => myLogger.i('add post'),
-        shape: const CircleBorder(),
-        backgroundColor: activeTheme.foreground1,
-        child: Icon(Icons.add_rounded, color: activeTheme.text2),
+        onPressed: () => context.pushTransition(type: PageTransitionType.rightToLeft, child: const PostCreateScreen()),
+        child: const Icon(Icons.add_rounded),
       ),
       bottomNavigationBar: const Navbar(),
     );
@@ -97,15 +70,15 @@ class HomeTimelineTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<List<PostModel>> homeTimeline = ref.watch(homeTimelineNotifierProvider);
-    final Dimensions dimensions = Dimensions.of(context);
+    // final Dimensions dimensions = Dimensions.of(context);
 
-    final double contentWidth1 = dimensions.contentWidth1;
-    final double globalMargin1 = dimensions.globalMargin1;
-    final double buttonHeight1 = dimensions.buttonHeight1;
-    final double textSize1 = dimensions.textSize1;
-    final double textSize2 = dimensions.textSize2;
-    final double textSize3 = dimensions.textSize3;
-    final double cornerRadius1 = dimensions.cornerRadius1;
+    // final double contentWidth1 = dimensions.contentWidth1;
+    // final double globalMargin1 = dimensions.globalMargin1;
+    // final double buttonHeight1 = dimensions.buttonHeight1;
+    // final double textSize1 = dimensions.textSize1;
+    // final double textSize2 = dimensions.textSize2;
+    // final double textSize3 = dimensions.textSize3;
+    // final double cornerRadius1 = dimensions.cornerRadius1;
 
     return homeTimeline.when(
       data: (posts) {
@@ -129,15 +102,15 @@ class GlobalTimelineTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<List<PostModel>> globalTimeline = ref.watch(globalTimelineNotifierProvider);
-    final Dimensions dimensions = Dimensions.of(context);
+    // final Dimensions dimensions = Dimensions.of(context);
 
-    final double contentWidth1 = dimensions.contentWidth1;
-    final double globalMargin1 = dimensions.globalMargin1;
-    final double buttonHeight1 = dimensions.buttonHeight1;
-    final double textSize1 = dimensions.textSize1;
-    final double textSize2 = dimensions.textSize2;
-    final double textSize3 = dimensions.textSize3;
-    final double cornerRadius1 = dimensions.cornerRadius1;
+    // final double contentWidth1 = dimensions.contentWidth1;
+    // final double globalMargin1 = dimensions.globalMargin1;
+    // final double buttonHeight1 = dimensions.buttonHeight1;
+    // final double textSize1 = dimensions.textSize1;
+    // final double textSize2 = dimensions.textSize2;
+    // final double textSize3 = dimensions.textSize3;
+    // final double cornerRadius1 = dimensions.cornerRadius1;
 
     return globalTimeline.when(
       data: (posts) {
@@ -230,5 +203,164 @@ class EmptyGlobalState extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class PostCreateScreen extends ConsumerStatefulWidget {
+  const PostCreateScreen({super.key});
+
+  @override
+  ConsumerState<PostCreateScreen> createState() => _PostCreateScreenState();
+}
+
+class _PostCreateScreenState extends ConsumerState<PostCreateScreen> {
+  final FocusNode _focusNode = FocusNode();
+
+  // final MediaController _mediaController = MediaController();
+  final ImagePicker _picker = ImagePicker();
+  final TextEditingController _postController = TextEditingController();
+  final List<XFile> _pickedImages = [];
+  XFile? _pickedVideo;
+  DateTime? scheduledTime;
+
+  Future<void> _pickMedia() async {
+    final XFile? pickedFile = await _picker.pickMedia(imageQuality: 100);
+    if (pickedFile != null) {
+      final String fileType = pickedFile.mimeType ?? '';
+
+      if (fileType.startsWith('image/') && _pickedVideo == null) {
+        _pickedImages.add(pickedFile);
+      } else if (fileType.startsWith('video/')) {
+        _pickedVideo = pickedFile;
+      }
+    }
+  }
+
+  void _schedulePost() async {
+    // TODO: Implement post scheduling logic
+  }
+
+  void _submitPost() async {
+    // if (_postController.text.isEmpty && mediaFiles.isEmpty) {
+    //   return;
+    // }
+    // final homeTimelineProvider = ref.read(homeTimelineNotifierProvider.notifier);
+    // await homeTimelineProvider.fetchCreatePost(body: _postController.text.trim(), images: images, video: video, scheduledTime: scheduledTime);
+    //
+    // if (!context.mounted) {
+    //   return;
+    // }
+    // Navigator.pop(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final MyTheme activeTheme = ref.watch(themeNotifierProvider);
+    final Dimensions dimensions = Dimensions.of(context);
+
+    // final double contentWidth2 = dimensions.contentWidth2;
+    final double globalMargin2 = dimensions.globalMargin2;
+    // final double buttonHeight1 = dimensions.buttonHeight1;
+    // final double textSize1 = dimensions.textSize1;
+    // final double textSize2 = dimensions.textSize2;
+    // final double textSize3 = dimensions.textSize3;
+    // final double cornerRadius1 = dimensions.cornerRadius1;
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Create Post'),
+        leading: GestureDetector(
+          onTap: () => context.pushTransition(type: PageTransitionType.leftToRight, child: const CommunityScreen()),
+          child: Icon(Icons.arrow_back_rounded, color: activeTheme.text2),
+        ),
+        actionsPadding: EdgeInsets.only(right: globalMargin2),
+        actions: [
+          GestureDetector(onTap: _schedulePost, child: Icon(Icons.schedule_rounded, color: activeTheme.text2)),
+          SizedBox(width: globalMargin2),
+          GestureDetector(onTap: _submitPost, child: Icon(Icons.send_rounded, color: activeTheme.text2)),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(left: globalMargin2, right: globalMargin2, top: globalMargin2),
+              // Profile Info
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      const CircleAvatar(radius: 20, child: Icon(Icons.person)),
+                      SizedBox(width: globalMargin2),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('kamronbek', style: GoogleFonts.quicksand(color: activeTheme.text2, fontSize: 16)),
+                          Text('@kamronbek_atajanov', style: GoogleFonts.quicksand(color: activeTheme.text2.withAlpha(128), fontSize: 12)),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Icon(Icons.more_vert_rounded, color: activeTheme.text2),
+                ],
+              ),
+            ),
+            // Input text
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: globalMargin2, vertical: globalMargin2),
+              child: TextField(
+                cursorColor: activeTheme.text2,
+                focusNode: _focusNode,
+                cursorWidth: 0.5,
+                maxLength: 200,
+                // minLines: 1,
+                // maxLines: 5,
+                maxLines: null,
+                style: GoogleFonts.quicksand(color: activeTheme.text2),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: "What's on your mind?",
+                  hintStyle: GoogleFonts.quicksand(color: activeTheme.text2.withAlpha(128)),
+                  counterStyle: GoogleFonts.quicksand(color: activeTheme.text2.withAlpha(128)),
+                ),
+                controller: _postController,
+              ),
+            ),
+            // Image Placeholder
+            Container(
+              width: double.infinity,
+              height: 120,
+              decoration: BoxDecoration(color: activeTheme.foreground1),
+              child: GestureDetector(onTap: _pickMedia, child: Text('Add Images or Video.', style: GoogleFonts.quicksand(color: activeTheme.text2))),
+            ),
+            // Dismiss
+            // Expanded(child: GestureDetector(onTap: () => _focusNode.unfocus())),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MediaController {
+  final ValueNotifier<List<String>> mediaFiles = ValueNotifier([]);
+  final ValueNotifier<bool> isVideoSelected = ValueNotifier(false);
+
+  void pickImage(String imagePath) {
+    if (!isVideoSelected.value) {
+      mediaFiles.value = [...mediaFiles.value, imagePath];
+    }
+  }
+
+  void pickVideo(String videoPath) {
+    isVideoSelected.value = true;
+    mediaFiles.value = [videoPath];
+  }
+
+  void removeMedia(String mediaPath) {
+    mediaFiles.value = mediaFiles.value.where((item) => item != mediaPath).toList();
+    if (mediaFiles.value.isEmpty) {
+      isVideoSelected.value = false;
+    }
   }
 }

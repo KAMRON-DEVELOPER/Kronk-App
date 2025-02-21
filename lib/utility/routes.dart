@@ -24,7 +24,7 @@ PageTransition? routes(RouteSettings settings, BuildContext context) {
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeOut,
         childCurrent: context.currentRoute,
-        child: const RepaintBoundary(child: SplashScreen()),
+        child: BlocProvider(create: (BuildContext context) => AuthenticationBloc(), child: const SplashScreen()),
         settings: settings,
       );
     case '/settings':

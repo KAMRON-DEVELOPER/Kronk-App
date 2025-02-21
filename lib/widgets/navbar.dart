@@ -18,34 +18,40 @@ class Navbar extends ConsumerWidget {
     final int activeIndex = ref.watch(activeIndexProvider);
 
     return Container(
-      height: 52,
+      height: 60,
       decoration: BoxDecoration(color: activeTheme.background1, border: Border(top: BorderSide(color: activeTheme.text2.withAlpha(128), width: 0.1))),
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          final double spacing = (constraints.maxWidth - enabledNavbarItems.length * 32) / (enabledNavbarItems.length + 1);
-          return ListView.separated(
-            scrollDirection: Axis.horizontal,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.symmetric(horizontal: spacing),
-            itemCount: enabledNavbarItems.length,
-            separatorBuilder: (BuildContext context, int index) => SizedBox(width: spacing),
-            itemBuilder:
-                (BuildContext context, int index) => SizedBox(
-                  width: 32,
-                  child: GestureDetector(
-                    onLongPress: () => Navigator.pushNamed(context, '/settings'),
-                    onTap: () {
-                      ref.read(activeIndexProvider.notifier).state = index;
-                      Navigator.pushReplacementNamed(context, enabledNavbarItems[index].route);
-                    },
-                    child: SvgPicture.asset(
-                      activeIndex == index ? enabledNavbarItems[index].activeSVGPath : enabledNavbarItems[index].svgPath,
-                      colorFilter: ColorFilter.mode(activeIndex == index ? activeTheme.text3 : activeTheme.text2.withAlpha(128), BlendMode.srcIn),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        child: Row(
+          children:
+              enabledNavbarItems.asMap().entries.map((entry) {
+                final int index = entry.key;
+                final NavbarModel item = entry.value;
+                return GestureDetector(
+                  onTap: () {
+                    ref.read(activeIndexProvider.notifier).state = index;
+                    Navigator.pushReplacementNamed(context, item.route);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SvgPicture.asset(
+                          activeIndex == index ? item.activeSVGPath : item.svgPath,
+                          height: 24,
+                          width: 24,
+                          colorFilter: ColorFilter.mode(activeIndex == index ? activeTheme.text3 : activeTheme.text2.withAlpha(128), BlendMode.srcIn),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(item.route, style: TextStyle(fontSize: 12, color: activeIndex == index ? activeTheme.text3 : activeTheme.text2.withAlpha(128))),
+                      ],
                     ),
                   ),
-                ),
-          );
-        },
+                );
+              }).toList(),
+        ),
       ),
     );
   }

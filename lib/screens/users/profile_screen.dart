@@ -35,19 +35,12 @@ class ProfileScreen extends ConsumerWidget {
         backgroundColor: activeTheme.background1,
         title: Text('Profile', style: TextStyle(color: activeTheme.text3)),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.settings, color: activeTheme.text2),
-            onPressed: () => Navigator.pushNamed(context, '/settings'),
-          ),
-        ],
+        actions: [IconButton(icon: Icon(Icons.settings, color: activeTheme.text2), onPressed: () => Navigator.pushNamed(context, '/settings'))],
       ),
       body: asyncUser.when(
         data: (UserModel? user) => user != null ? ProfileWidget(user: user) : const ProfileSkeletonWidget(),
         loading: () => const ProfileSkeletonWidget(),
-        error:
-            (Object error, StackTrace _) =>
-                Center(child: Text('Error: $error', style: TextStyle(color: activeTheme.text3))),
+        error: (Object error, StackTrace _) => Center(child: Text('Error: $error', style: TextStyle(color: activeTheme.text3))),
       ),
       bottomNavigationBar: const Navbar(),
     );
@@ -101,17 +94,13 @@ class _ProfileWidgetState extends ConsumerState<ProfileWidget> with SingleTicker
           // profile info
           Container(
             width: contentWidth2,
-            decoration: BoxDecoration(
-              color: activeTheme.foreground1,
-              borderRadius: BorderRadius.circular(cornerRadius1),
-            ),
+            decoration: BoxDecoration(color: activeTheme.foreground1, borderRadius: BorderRadius.circular(cornerRadius1)),
             child: Column(
               children: [
                 CircleAvatar(
                   radius: 48,
                   child: CachedNetworkImage(
-                    imageUrl:
-                        'http://192.168.31.43:9000/dev-bucket/${widget.user.avatar ?? 'defaults/default-avatar.jpg'}',
+                    imageUrl: 'http://192.168.31.43:9000/dev-bucket/${widget.user.avatar ?? 'defaults/default-avatar.jpg'}',
                     fit: BoxFit.cover,
                     width: 96,
                     height: 96,
@@ -119,31 +108,14 @@ class _ProfileWidgetState extends ConsumerState<ProfileWidget> with SingleTicker
                     memCacheWidth: 96.cacheSize(context),
                     imageBuilder:
                         (context, imageProvider) => Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(image: imageProvider, fit: BoxFit.cover, isAntiAlias: true),
-                          ),
+                          decoration: BoxDecoration(shape: BoxShape.circle, image: DecorationImage(image: imageProvider, fit: BoxFit.cover, isAntiAlias: true)),
                         ),
                     placeholder: (context, url) => CircularProgressIndicator(color: activeTheme.text2, strokeWidth: 2),
                     errorWidget: (context, url, error) => const Icon(Icons.error, size: 98, color: Colors.redAccent),
                   ),
                 ),
-                Text(
-                  widget.user.username,
-                  style: GoogleFonts.quicksand(
-                    color: activeTheme.text2,
-                    fontSize: textSize3 * 0.8,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Text(
-                  widget.user.email,
-                  style: GoogleFonts.quicksand(
-                    color: activeTheme.text2,
-                    fontSize: textSize3 * 0.8,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                Text(widget.user.username, style: GoogleFonts.quicksand(color: activeTheme.text2, fontSize: textSize3 * 0.8, fontWeight: FontWeight.w600)),
+                Text(widget.user.email, style: GoogleFonts.quicksand(color: activeTheme.text2, fontSize: textSize3 * 0.8, fontWeight: FontWeight.w600)),
               ],
             ),
           ),
@@ -170,12 +142,7 @@ class _ProfileWidgetState extends ConsumerState<ProfileWidget> with SingleTicker
             child: TabBarView(
               physics: const BouncingScrollPhysics(),
               controller: tabController,
-              children: [
-                const MediaTabWidget(),
-                const BookmarksTabWidget(),
-                const PostsTabWidget(),
-                const CommentsTabWidget(),
-              ],
+              children: [const MediaTabWidget(), const BookmarksTabWidget(), const PostsTabWidget(), const CommentsTabWidget()],
             ),
           ),
         ],
@@ -206,18 +173,11 @@ class MediaTabWidget extends ConsumerWidget {
       slivers: [
         SliverGrid.builder(
           itemCount: 8,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 0,
-            mainAxisSpacing: 0,
-          ),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 0, mainAxisSpacing: 0),
           itemBuilder: (context, index) {
             return Container(
               alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: currentTheme.foreground1,
-                border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1),
-              ),
+              decoration: BoxDecoration(color: currentTheme.foreground1, border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1)),
               child: Icon(Icons.image_rounded, color: currentTheme.text2, size: 36),
             );
           },
@@ -249,18 +209,11 @@ class BookmarksTabWidget extends ConsumerWidget {
       slivers: [
         SliverGrid.builder(
           itemCount: 8,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 0,
-            mainAxisSpacing: 0,
-          ),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 0, mainAxisSpacing: 0),
           itemBuilder: (context, index) {
             return Container(
               alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: currentTheme.foreground1,
-                border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1),
-              ),
+              decoration: BoxDecoration(color: currentTheme.foreground1, border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1)),
               child: Icon(Icons.bookmark_rounded, color: currentTheme.text2, size: 36),
             );
           },
@@ -292,18 +245,11 @@ class PostsTabWidget extends ConsumerWidget {
       slivers: [
         SliverGrid.builder(
           itemCount: 8,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 0,
-            mainAxisSpacing: 0,
-          ),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 0, mainAxisSpacing: 0),
           itemBuilder: (context, index) {
             return Container(
               alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: currentTheme.foreground1,
-                border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1),
-              ),
+              decoration: BoxDecoration(color: currentTheme.foreground1, border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1)),
               child: Icon(Icons.message_rounded, color: currentTheme.text2, size: 36),
             );
           },
@@ -335,18 +281,11 @@ class CommentsTabWidget extends ConsumerWidget {
       slivers: [
         SliverGrid.builder(
           itemCount: 8,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 0,
-            mainAxisSpacing: 0,
-          ),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 0, mainAxisSpacing: 0),
           itemBuilder: (context, index) {
             return Container(
               alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: currentTheme.foreground1,
-                border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1),
-              ),
+              decoration: BoxDecoration(color: currentTheme.foreground1, border: Border.all(color: currentTheme.text2.withAlpha(64), width: 0.1)),
               child: Icon(Icons.comment_rounded, color: currentTheme.text2, size: 36),
             );
           },
@@ -368,81 +307,10 @@ class ProfileSkeletonWidget extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ElevatedButton(onPressed: () => Navigator.pushNamed(context, '/auth/login'), child: const Text('Sign In')),
-            ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/auth/register'),
-              child: const Text('Sign Up'),
-            ),
+            ElevatedButton(onPressed: () => Navigator.pushNamed(context, '/auth/register'), child: const Text('Sign Up')),
           ],
         ),
       ],
     );
   }
 }
-
-/*
-
- Uint8List? _croppedImage;
-  DateTime _selectedDate = DateTime.now();
-
-  void _showImageSelector({
-    required BuildContext context,
-    required int resizeWidth,
-    required int resizeHeight,
-    required int screenWidth,
-    required int screenHeight,
-  }) {
-    showImageSelector(
-      context: context,
-      resizeWidth: resizeWidth,
-      resizeHeight: resizeHeight,
-      screenHeight: screenWidth,
-      screenWidth: screenWidth,
-      onImageSelected: (croppedImage) {
-        croppedImage = croppedImage;
-        setState(() {
-          _croppedImage = croppedImage;
-        });
-      },
-    );
-  }
-
-  void _showDateSelector({required BuildContext context}) {
-    showCustomDateSelector(
-      context: context,
-      onDateSelected: (selectedDate) {
-        setState(() {
-          _selectedDate = selectedDate!;
-        });
-      },
-    );
-  }
-
-
-
-
-
-
-
-/*
-
-   ElevatedButton(
-        onPressed: () {
-          _showImageSelector(
-              context: context,
-              screenWidth: screenWidth.floor(),
-              screenHeight: screenHeight.floor(),
-              resizeWidth: 140,
-              resizeHeight: 140);
-        },
-        child: const Text("Show Photo Selector"),
-      ), // Image Picker Button
-      ElevatedButton(
-        onPressed: () => _showDateSelector(context: context),
-        child: const Text("Show Scroll Date Selector"),
-      ),
-
-*/
-
-
-
- */

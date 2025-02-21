@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:icons_plus/icons_plus.dart';
+import 'package:kronk/bloc/authentication/authentication_bloc.dart';
+import 'package:kronk/bloc/authentication/authentication_event.dart';
+import 'package:kronk/bloc/authentication/authentication_state.dart';
 import 'package:kronk/utility/dimensions.dart';
+import 'package:kronk/utility/my_logger.dart';
 import 'package:kronk/widgets/my_theme.dart';
 import '../../riverpod/connectivity_notifier_provider.dart';
 import '../../riverpod/theme_notifier_provider.dart';
@@ -23,47 +28,111 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     final double contentWidth1 = dimensions.contentWidth1;
     final double globalMargin1 = dimensions.globalMargin1;
     final double buttonHeight1 = dimensions.buttonHeight1;
-    final double textSize1 = dimensions.textSize1;
-    final double textSize2 = dimensions.textSize2;
-    final double textSize3 = dimensions.textSize3;
     final double cornerRadius1 = dimensions.cornerRadius1;
-    return Scaffold(
-      backgroundColor: currentTheme.background1,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text('Kronk', style: GoogleFonts.quicksand(textStyle: TextStyle(color: currentTheme.foreground3, fontSize: textSize1, fontWeight: FontWeight.w700))),
-            Text('it is meant to be yours', style: GoogleFonts.quicksand(textStyle: TextStyle(color: currentTheme.foreground3, fontSize: textSize3, fontWeight: FontWeight.w600))),
-            SizedBox(height: globalMargin1),
-            ElevatedButton(
-              onPressed: () => onPressedSplash(context: context, asyncConnectivity: asyncConnectivity, forSignIn: true),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xffAEDDF1),
-                fixedSize: Size(contentWidth1, buttonHeight1),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(cornerRadius1)),
-              ),
-              child: Text('Sign In', style: GoogleFonts.quicksand(textStyle: TextStyle(color: currentTheme.background1, fontSize: textSize2, fontWeight: FontWeight.w600))),
+    return BlocConsumer<AuthenticationBloc, AuthenticationState>(
+      listener: (BuildContext context, AuthenticationState state) async {
+        myLogger.d('🚨 listener: $state');
+        if (state is AuthenticationLoading) {
+        } else if (state is AuthenticationSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: currentTheme.background3,
+              content: const Column(children: [Text('🎉 You have logged in successfully.')]),
+              duration: const Duration(seconds: 5),
+              behavior: SnackBarBehavior.floating,
+              dismissDirection: DismissDirection.horizontal,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              margin: const EdgeInsets.only(bottom: 24, left: 16, right: 16),
             ),
-            SizedBox(height: globalMargin1),
-            OutlinedButton(
-              onPressed: () => onPressedSplash(context: context, asyncConnectivity: asyncConnectivity, forSignUp: true),
-              style: OutlinedButton.styleFrom(
-                fixedSize: Size(contentWidth1, buttonHeight1),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(cornerRadius1)),
-                side: BorderSide(color: currentTheme.foreground3, width: 2),
-              ),
-              child: Text('Sign Up', style: GoogleFonts.quicksand(textStyle: TextStyle(color: currentTheme.foreground3, fontSize: textSize2, fontWeight: FontWeight.w600))),
+          );
+          await Future.delayed(const Duration(seconds: 5));
+          try {
+            if (!context.mounted) return;
+            Navigator.pushNamedAndRemoveUntil(context, '/settings', (Route<dynamic> route) => false);
+          } catch (error) {
+            myLogger.d('unexpected error while routing in login_screen: $error');
+          }
+        } else if (state is GoogleAuthenticationSuccess) {
+          myLogger.i('google auth successfully done!!!');
+          Navigator.pushReplacementNamed(context, '/settings');
+        } else if (state is AuthenticationFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: currentTheme.background3,
+              content: Text(state.failureMessage!),
+              duration: const Duration(seconds: 5),
+              behavior: SnackBarBehavior.floating,
+              dismissDirection: DismissDirection.vertical,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              margin: EdgeInsets.only(bottom: globalMargin1, left: globalMargin1, right: globalMargin1),
+              elevation: 0,
             ),
-            SizedBox(height: globalMargin1 / 2),
-            TextButton(
-              onPressed: () => Navigator.pushNamed(context, '/settings'),
-              child: Text('skip', style: GoogleFonts.quicksand(textStyle: TextStyle(color: currentTheme.foreground3, fontSize: textSize3, fontWeight: FontWeight.w600))),
+          );
+        }
+      },
+      builder: (BuildContext context, AuthenticationState state) {
+        return Scaffold(
+          backgroundColor: currentTheme.background1,
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text('Kronk', style: Theme.of(context).textTheme.displayLarge),
+                Text('it is meant to be yours', style: Theme.of(context).textTheme.displaySmall),
+                SizedBox(height: globalMargin1),
+
+                ElevatedButton(
+                  onPressed: () => onPressedSplash(context: context, asyncConnectivity: asyncConnectivity, forSignIn: true),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: currentTheme.text2,
+                    fixedSize: Size(contentWidth1, buttonHeight1),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(cornerRadius1)),
+                  ),
+                  child: Text('Sign In', style: Theme.of(context).textTheme.displayMedium?.copyWith(color: currentTheme.background1)),
+                ),
+                SizedBox(height: globalMargin1 / 2),
+                ElevatedButton(
+                  onPressed: () => onPressedSplash(context: context, asyncConnectivity: asyncConnectivity, forSignUp: true),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: currentTheme.text2,
+                    fixedSize: Size(contentWidth1, buttonHeight1),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(cornerRadius1)),
+                  ),
+                  child: Text('Sign Up', style: Theme.of(context).textTheme.displayMedium?.copyWith(color: currentTheme.background1)),
+                ),
+                SizedBox(height: globalMargin1 / 2),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        fixedSize: Size((contentWidth1 - globalMargin1 / 2) / 2, buttonHeight1),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(cornerRadius1)),
+                        side: BorderSide(color: currentTheme.foreground3, width: 2),
+                      ),
+                      onPressed: () => context.read<AuthenticationBloc>().add(SocialAuthEvent()),
+                      child: Icon(IonIcons.logo_google, size: 32, color: currentTheme.text2),
+                    ),
+                    SizedBox(width: globalMargin1 / 2),
+                    OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        fixedSize: Size((contentWidth1 - globalMargin1 / 2) / 2, buttonHeight1),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(cornerRadius1)),
+                        side: BorderSide(color: currentTheme.foreground3, width: 2),
+                      ),
+                      onPressed: () => context.read<AuthenticationBloc>().add(SocialAuthEvent()),
+                      child: Icon(IonIcons.logo_apple, size: 32, color: currentTheme.text2),
+                    ),
+                  ],
+                ),
+                SizedBox(height: globalMargin1 / 2),
+                TextButton(onPressed: () => Navigator.pushNamed(context, '/settings'), child: Text('skip', style: Theme.of(context).textTheme.displaySmall)),
+                SizedBox(height: globalMargin1 / 2),
+              ],
             ),
-            SizedBox(height: globalMargin1 / 2),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
