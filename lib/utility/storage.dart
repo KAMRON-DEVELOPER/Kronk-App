@@ -25,13 +25,13 @@ class Storage {
 
   Future<void> initializeNavbar() async {
     final List<NavbarModel> defaultServices = [
-      NavbarModel(route: 'feed', svgPath: 'assets/icons/navbar/quill-pen-outline.svg', activeSVGPath: 'assets/icons/navbar/quill-pen-fill.svg'),
-      NavbarModel(route: 'chat', svgPath: 'assets/icons/navbar/chat-round-outline.svg', activeSVGPath: 'assets/icons/navbar/chat-round-fill.svg'),
-      NavbarModel(route: 'education', svgPath: 'assets/icons/navbar/education-outline.svg', activeSVGPath: 'assets/icons/navbar/education-solid.svg'),
-      NavbarModel(route: 'note', svgPath: 'assets/icons/navbar/note-outline.svg', activeSVGPath: 'assets/icons/navbar/note-solid.svg'),
-      NavbarModel(route: 'todo', svgPath: 'assets/icons/navbar/todo-outline.svg', activeSVGPath: 'assets/icons/navbar/todo-solid.svg'),
-      NavbarModel(route: 'entertainment', svgPath: 'assets/icons/navbar/player-outline.svg', activeSVGPath: 'assets/icons/navbar/player-solid.svg'),
-      NavbarModel(route: 'profile', svgPath: 'assets/icons/navbar/profile-outline.svg', activeSVGPath: 'assets/icons/navbar/profile-solid.svg'),
+      NavbarModel(route: 'feed', activeIconName: 'quillOutline', inactiveIconName: 'quillSolid'),
+      NavbarModel(route: 'chat', activeIconName: 'chatSolid', inactiveIconName: 'chatOutline'),
+      NavbarModel(route: 'education', activeIconName: 'educationSolid', inactiveIconName: 'educationOutline'),
+      NavbarModel(route: 'note', activeIconName: 'noteSolid', inactiveIconName: 'noteOutline'),
+      NavbarModel(route: 'todo', activeIconName: 'todoSolid', inactiveIconName: 'todoOutline'),
+      NavbarModel(route: 'entertainment', activeIconName: 'entertainmentSolid', inactiveIconName: 'entertainmentOutline'),
+      NavbarModel(route: 'profile', activeIconName: 'profileSolid', inactiveIconName: 'profileOutline'),
     ];
 
     if (navbarBox.isEmpty) {

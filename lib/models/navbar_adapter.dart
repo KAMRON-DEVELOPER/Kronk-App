@@ -8,18 +8,18 @@ class NavbarAdapter extends TypeAdapter<NavbarModel> {
   @override
   NavbarModel read(BinaryReader reader) {
     final String route = reader.readString();
-    final String svgPath = reader.readString();
-    final String activeSVGPath = reader.readString();
     final bool isEnabled = reader.readBool();
+    final String activeIconName = reader.readString();
+    final String inactiveIconName = reader.readString();
 
-    return NavbarModel(route: route, svgPath: svgPath, activeSVGPath: activeSVGPath, isEnabled: isEnabled);
+    return NavbarModel(route: route, isEnabled: isEnabled, activeIconName: activeIconName, inactiveIconName: inactiveIconName);
   }
 
   @override
   void write(BinaryWriter writer, NavbarModel obj) {
     writer.writeString(obj.route);
-    writer.writeString(obj.svgPath);
-    writer.writeString(obj.activeSVGPath);
     writer.writeBool(obj.isEnabled);
+    writer.writeString(obj.activeIconName);
+    writer.writeString(obj.inactiveIconName);
   }
 }

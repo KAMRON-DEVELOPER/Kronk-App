@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kronk/models/navbar_model.dart';
 import 'package:kronk/riverpod/navbar_notifier_provider.dart';
 import 'package:kronk/riverpod/theme_notifier_provider.dart';
@@ -27,12 +26,8 @@ class Navbar extends ConsumerWidget {
             enabledNavbarItems.map((item) {
               final int index = enabledNavbarItems.indexOf(item);
               return IconButton(
-                icon: SvgPicture.asset(
-                  activeIndex == index ? item.activeSVGPath : item.svgPath,
-                  height: 24,
-                  width: 24,
-                  colorFilter: ColorFilter.mode(activeIndex == index ? activeTheme.text3 : activeTheme.text2.withAlpha(128), BlendMode.srcIn),
-                ),
+                icon: index == activeIndex ? item.activeIcon : item.inactiveIcon,
+                color: index == activeIndex ? activeTheme.text3 : activeTheme.text2.withAlpha(128),
                 onPressed: () {
                   ref.read(activeIndexProvider.notifier).state = index;
                   Navigator.pushReplacementNamed(context, item.route);
