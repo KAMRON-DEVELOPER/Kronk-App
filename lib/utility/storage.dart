@@ -25,11 +25,11 @@ class Storage {
 
   Future<void> initializeNavbar() async {
     final List<NavbarModel> defaultServices = [
-      NavbarModel(route: 'tweets', svgPath: 'assets/icons/navbar/quill-pen-outline.svg', activeSVGPath: 'assets/icons/navbar/quill-pen-fill.svg'),
-      NavbarModel(route: 'chats', svgPath: 'assets/icons/navbar/chat-round-outline.svg', activeSVGPath: 'assets/icons/navbar/chat-round-fill.svg'),
+      NavbarModel(route: 'feed', svgPath: 'assets/icons/navbar/quill-pen-outline.svg', activeSVGPath: 'assets/icons/navbar/quill-pen-fill.svg'),
+      NavbarModel(route: 'chat', svgPath: 'assets/icons/navbar/chat-round-outline.svg', activeSVGPath: 'assets/icons/navbar/chat-round-fill.svg'),
       NavbarModel(route: 'education', svgPath: 'assets/icons/navbar/education-outline.svg', activeSVGPath: 'assets/icons/navbar/education-solid.svg'),
-      NavbarModel(route: 'notes', svgPath: 'assets/icons/navbar/note-outline.svg', activeSVGPath: 'assets/icons/navbar/note-solid.svg'),
-      NavbarModel(route: 'todos', svgPath: 'assets/icons/navbar/todo-outline.svg', activeSVGPath: 'assets/icons/navbar/todo-solid.svg'),
+      NavbarModel(route: 'note', svgPath: 'assets/icons/navbar/note-outline.svg', activeSVGPath: 'assets/icons/navbar/note-solid.svg'),
+      NavbarModel(route: 'todo', svgPath: 'assets/icons/navbar/todo-outline.svg', activeSVGPath: 'assets/icons/navbar/todo-solid.svg'),
       NavbarModel(route: 'entertainment', svgPath: 'assets/icons/navbar/player-outline.svg', activeSVGPath: 'assets/icons/navbar/player-solid.svg'),
       NavbarModel(route: 'profile', svgPath: 'assets/icons/navbar/profile-outline.svg', activeSVGPath: 'assets/icons/navbar/profile-solid.svg'),
     ];

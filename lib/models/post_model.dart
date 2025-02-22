@@ -11,7 +11,19 @@ class PostModel {
   final int dislikesCount;
   final int viewsCount;
 
-  PostModel({required this.id, required this.author, required this.body, this.images, this.video, this.scheduledTime, this.isArchived = false, this.commentsCount = 0, this.likesCount = 0, this.dislikesCount = 0, this.viewsCount = 0});
+  PostModel({
+    required this.id,
+    required this.author,
+    required this.body,
+    this.images,
+    this.video,
+    this.scheduledTime,
+    this.isArchived = false,
+    this.commentsCount = 0,
+    this.likesCount = 0,
+    this.dislikesCount = 0,
+    this.viewsCount = 0,
+  });
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
@@ -30,6 +42,18 @@ class PostModel {
   }
 
   Map<String, dynamic> toJson() {
-    return {'id': id, 'author': author, 'body': body, 'images': images, 'video': video, 'scheduled_time': scheduledTime, 'is_archived': isArchived, 'comments_count': commentsCount, 'likes_count': likesCount, 'dislikes_count': dislikesCount, 'views_count': viewsCount};
+    return {
+      'id': id,
+      'author': author,
+      'body': body,
+      'images': images,
+      'video': video,
+      'scheduled_time': scheduledTime,
+      'is_archived': isArchived,
+      'comments_count': commentsCount,
+      'likes_count': likesCount,
+      'dislikes_count': dislikesCount,
+      'views_count': viewsCount,
+    };
   }
 }

@@ -6,11 +6,7 @@ import '../models/user_model.dart';
 import '../utility/interceptors.dart';
 
 BaseOptions getUsersBaseOptions() {
-  return BaseOptions(
-    baseUrl: 'http://192.168.31.43:8000/users',
-    contentType: 'application/json',
-    validateStatus: (int? status) => true,
-  );
+  return BaseOptions(baseUrl: 'http://192.168.31.43:8000/users', contentType: 'application/json', validateStatus: (int? status) => true);
 }
 
 class UsersService {
@@ -98,10 +94,7 @@ class UsersService {
 
   Future<Response?> fetchRefreshTokens({required String refreshToken}) async {
     try {
-      Response response = await _dio.post(
-        '/refresh',
-        options: Options(headers: {'Authorization': 'Bearer $refreshToken'}),
-      );
+      Response response = await _dio.post('/refresh', options: Options(headers: {'Authorization': 'Bearer $refreshToken'}));
       myLogger.i('🚀 response.data in fetchRefreshTokens: ${response.data}  statusCode: ${response.statusCode}');
       return response;
     } catch (error) {

@@ -79,17 +79,9 @@ flutter:
     - assets/translations/
 
   fonts:
-    - family: AdwaitaSans
+    - family: MyIcon
       fonts:
-        - asset: assets/fonts/AdwaitaSans-Regular.ttf
-
-    - family: AdwaitaMono
-      fonts:
-        - asset: assets/fonts/AdwaitaMono-Regular.ttf
-    
-    - family: SFPro
-      fonts:
-        - asset: assets/fonts/SFProRegular.otf
+        - asset: assets/fonts/MyIcon.ttf
 
   uses-material-design: true
 

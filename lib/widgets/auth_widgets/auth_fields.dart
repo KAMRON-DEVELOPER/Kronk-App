@@ -2,61 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kronk/widgets/my_theme.dart';
 
-class AuthInputFieldWidget extends StatefulWidget {
-  final MyTheme currentTheme;
-  final String fieldName;
-  final TextEditingController controller;
-  final String? errorText;
-  final void Function(String) onChanged;
-  final double buttonHeight;
-
-  const AuthInputFieldWidget({
-    super.key,
-    required this.currentTheme,
-    required this.fieldName,
-    required this.controller,
-    required this.errorText,
-    required this.onChanged,
-    required this.buttonHeight,
-  });
-
-  @override
-  State<AuthInputFieldWidget> createState() => _AuthInputFieldWidgetState();
-}
-
-class _AuthInputFieldWidgetState extends State<AuthInputFieldWidget> {
-  bool isPasswordVisible = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      controller: widget.controller,
-      obscureText: widget.fieldName == 'password' && !isPasswordVisible,
-      style: TextStyle(color: widget.currentTheme.text2),
-      cursorColor: widget.currentTheme.text2,
-      onChanged: widget.onChanged,
-      autofillHints: [widget.fieldName == 'username' ? AutofillHints.username : (widget.fieldName == 'email' ? AutofillHints.email : AutofillHints.password)],
-      decoration: InputDecoration(
-        hintText: widget.fieldName,
-        hintStyle: TextStyle(color: widget.currentTheme.text2.withAlpha(128)),
-        errorText: widget.errorText,
-        errorStyle: const TextStyle(color: Colors.red, fontSize: 12),
-        constraints: BoxConstraints(maxHeight: widget.buttonHeight + (widget.errorText != null ? 20 : 0), minHeight: widget.buttonHeight + (widget.errorText != null ? 20 : 0)),
-        enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: widget.currentTheme.text2.withAlpha(128)), borderRadius: BorderRadius.circular(12)),
-        focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: widget.currentTheme.text2), borderRadius: BorderRadius.circular(12)),
-        errorBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.redAccent), borderRadius: BorderRadius.circular(widget.buttonHeight / 2)),
-        focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.redAccent.withAlpha(128)), borderRadius: BorderRadius.circular(12)),
-        suffixIcon: widget.fieldName == 'password'
-            ? IconButton(
-                icon: Icon(isPasswordVisible ? Icons.visibility : Icons.visibility_off, color: widget.currentTheme.text2.withAlpha(128)),
-                onPressed: () => setState(() => isPasswordVisible = !isPasswordVisible),
-              )
-            : null, // Show eye icon only for password field
-      ),
-    );
-  }
-}
-
 class CodeInputWidget extends StatefulWidget {
   final MyTheme currentTheme;
   final double buttonHeight;

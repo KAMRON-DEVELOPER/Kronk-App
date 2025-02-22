@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kronk/screens/users/notes_screen.dart';
-import 'package:kronk/screens/users/request_reset_password_screen.dart';
-import 'package:kronk/screens/users/settings_screen.dart';
-import 'package:kronk/screens/users/todos_screen.dart';
+import 'package:kronk/bloc/authentication/authentication_bloc.dart';
+import 'package:kronk/screens/chat/chat_screen.dart';
+import 'package:kronk/screens/education/education_screen.dart';
+import 'package:kronk/screens/feed/feed_screen.dart';
+import 'package:kronk/screens/user/auth_screen.dart';
+import 'package:kronk/screens/user/notes_screen.dart';
+import 'package:kronk/screens/user/player_screen.dart';
+import 'package:kronk/screens/user/profile_screen.dart';
+import 'package:kronk/screens/user/request_reset_password_screen.dart';
+import 'package:kronk/screens/user/reset_password_screen.dart';
+import 'package:kronk/screens/user/settings_screen.dart';
+import 'package:kronk/screens/user/splash_screen.dart';
+import 'package:kronk/screens/user/todos_screen.dart';
+import 'package:kronk/screens/user/verify_screen.dart';
 import 'package:page_transition/page_transition.dart';
-import '../bloc/authentication/authentication_bloc.dart';
-import '../screens/community/community_screen.dart';
-import '../screens/education/education_screen.dart';
-import '../screens/users/player_screen.dart';
-import '../screens/users/profile_screen.dart';
-import '../screens/users/login_screen.dart';
-import '../screens/users/register_screen.dart';
-import '../screens/users/reset_password_screen.dart';
-import '../screens/users/splash_screen.dart';
-import '../screens/users/verify_screen.dart';
 
 PageTransition? routes(RouteSettings settings, BuildContext context) {
   switch (settings.name) {
@@ -36,9 +36,9 @@ PageTransition? routes(RouteSettings settings, BuildContext context) {
         child: const RepaintBoundary(child: SettingsScreen()),
         settings: settings,
       );
-    case '/auth/register':
+    case '/auth':
       return PageTransition(
-        child: BlocProvider(create: (BuildContext context) => AuthenticationBloc(), child: const RegisterScreen()),
+        child: BlocProvider(create: (BuildContext context) => AuthenticationBloc(), child: const AuthScreen()),
         type: PageTransitionType.rightToLeft,
         reverseType: PageTransitionType.leftToRight,
         duration: const Duration(milliseconds: 200),
@@ -48,15 +48,6 @@ PageTransition? routes(RouteSettings settings, BuildContext context) {
     case '/auth/verify':
       return PageTransition(
         child: BlocProvider(create: (BuildContext context) => AuthenticationBloc(), child: const VerifyScreen()),
-        type: PageTransitionType.rightToLeft,
-        reverseType: PageTransitionType.leftToRight,
-        duration: const Duration(milliseconds: 200),
-        alignment: Alignment.center,
-        settings: settings,
-      );
-    case '/auth/login':
-      return PageTransition(
-        child: BlocProvider(create: (BuildContext context) => AuthenticationBloc(), child: const LoginScreen()),
         type: PageTransitionType.rightToLeft,
         reverseType: PageTransitionType.leftToRight,
         duration: const Duration(milliseconds: 200),
@@ -81,9 +72,17 @@ PageTransition? routes(RouteSettings settings, BuildContext context) {
         alignment: Alignment.center,
         settings: settings,
       );
-    case '/community':
+    case '/feed':
       return PageTransition(
-        child: const CommunityScreen(),
+        child: const FeedScreen(),
+        type: PageTransitionType.fade,
+        duration: const Duration(milliseconds: 200),
+        alignment: Alignment.center,
+        settings: settings,
+      );
+    case '/chat':
+      return PageTransition(
+        child: const ChatScreen(),
         type: PageTransitionType.fade,
         duration: const Duration(milliseconds: 200),
         alignment: Alignment.center,
@@ -97,7 +96,7 @@ PageTransition? routes(RouteSettings settings, BuildContext context) {
         alignment: Alignment.center,
         settings: settings,
       );
-    case '/notes':
+    case '/note':
       return PageTransition(
         child: const NotesScreen(),
         type: PageTransitionType.fade,
