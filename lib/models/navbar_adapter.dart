@@ -9,17 +9,17 @@ class NavbarAdapter extends TypeAdapter<NavbarModel> {
   NavbarModel read(BinaryReader reader) {
     final String route = reader.readString();
     final bool isEnabled = reader.readBool();
-    final String activeIconName = reader.readString();
-    final String inactiveIconName = reader.readString();
+    final int activeCodePoint = reader.readInt();
+    final int inactiveCodePoint = reader.readInt();
 
-    return NavbarModel(route: route, isEnabled: isEnabled, activeIconName: activeIconName, inactiveIconName: inactiveIconName);
+    return NavbarModel(route: route, activeCodePoint: activeCodePoint, inactiveCodePoint: inactiveCodePoint, isEnabled: isEnabled);
   }
 
   @override
-  void write(BinaryWriter writer, NavbarModel obj) {
-    writer.writeString(obj.route);
-    writer.writeBool(obj.isEnabled);
-    writer.writeString(obj.activeIconName);
-    writer.writeString(obj.inactiveIconName);
+  void write(BinaryWriter writer, NavbarModel model) {
+    writer.writeString(model.route);
+    writer.writeBool(model.isEnabled);
+    writer.writeInt(model.activeCodePoint);
+    writer.writeInt(model.inactiveCodePoint);
   }
 }

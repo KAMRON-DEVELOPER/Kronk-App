@@ -15,6 +15,8 @@ class MyIcons {
   static const IconData teaCup0Solid = IconData(0xe99a, fontFamily: _fontFamily);
   static const IconData teaCup0Outline = IconData(0xe999, fontFamily: _fontFamily);
 
+  static const IconData pixelHeart = IconData(0xe95b, fontFamily: _fontFamily);
+
   // navbar
   static const IconData quill0Solid = IconData(0xe982, fontFamily: _fontFamily); // feed not active
   static const IconData quill0Outline = IconData(0xe981, fontFamily: _fontFamily); // feed active

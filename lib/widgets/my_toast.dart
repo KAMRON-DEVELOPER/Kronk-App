@@ -13,8 +13,8 @@ class MyToast {
   }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: getToastColor(type: type),
-        content: Text(message, style: TextStyle(color: activeTheme.text2, fontSize: 14), maxLines: 2, overflow: TextOverflow.ellipsis),
+        backgroundColor: activeTheme.foreground1,
+        content: Text(message, style: TextStyle(color: getToastColor(type: type), fontSize: 16), maxLines: 2, overflow: TextOverflow.ellipsis),
         duration: duration,
         behavior: SnackBarBehavior.floating,
         dismissDirection: DismissDirection.horizontal,
@@ -32,12 +32,26 @@ class MyToast {
 Color getToastColor({required ToastType type}) {
   switch (type) {
     case ToastType.info:
-      return const Color(0xFF1E3A5F);
+      return Colors.lightBlueAccent;
     case ToastType.warning:
-      return const Color(0xFF785A28);
+      return Colors.yellowAccent;
     case ToastType.error:
-      return const Color(0xFF6B2B2B);
+      return Colors.redAccent;
     case ToastType.serverError:
-      return const Color(0xFF552E5A);
+      return Colors.deepOrange;
   }
 }
+
+String getGlyph({required ToastType type}) {
+  switch (type) {
+    case ToastType.info:
+      return '🚀';
+    case ToastType.warning:
+      return '⚠️';
+    case ToastType.error:
+      return '🚨';
+    case ToastType.serverError:
+      return '🌋';
+  }
+}
+final String icons = '🤥 🤨 🤡 🤞 😎 🤏 🔄';

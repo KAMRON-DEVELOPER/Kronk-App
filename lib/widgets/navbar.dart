@@ -26,54 +26,19 @@ class Navbar extends ConsumerWidget {
             enabledNavbarItems.map((item) {
               final int index = enabledNavbarItems.indexOf(item);
               return IconButton(
-                icon: index == activeIndex ? item.activeIcon : item.inactiveIcon,
-                color: index == activeIndex ? activeTheme.text3 : activeTheme.text2.withAlpha(128),
                 onPressed: () {
                   ref.read(activeIndexProvider.notifier).state = index;
                   Navigator.pushReplacementNamed(context, item.route);
                 },
+                iconSize: 24,
+                isSelected: index == activeIndex,
+                icon: Icon(item.activeIconData),
+                selectedIcon: Icon(item.inactiveIconData),
+                color: index == activeIndex ? activeTheme.text3 : activeTheme.text2.withAlpha(128),
+                tooltip: item.route,
               );
             }).toList(),
       ),
     );
-
-    // return AnimatedContainer(
-    //   duration: const Duration(milliseconds: 200),
-    //   height: 60,
-    //   decoration: BoxDecoration(color: activeTheme.background1, border: Border(top: BorderSide(color: activeTheme.text2.withAlpha(128), width: 0.1))),
-    //   child: SingleChildScrollView(
-    //     scrollDirection: Axis.horizontal,
-    //     physics: const BouncingScrollPhysics(),
-    //     child: Row(
-    //       children:
-    //           enabledNavbarItems.asMap().entries.map((entry) {
-    //             final int index = entry.key;
-    //             final NavbarModel item = entry.value;
-    //             return GestureDetector(
-    //               onTap: () {
-    //                 ref.read(activeIndexProvider.notifier).state = index;
-    //                 Navigator.pushReplacementNamed(context, item.route);
-    //               },
-    //               child: Padding(
-    //                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-    //                 child: Column(
-    //                   mainAxisSize: MainAxisSize.min,
-    //                   children: [
-    //                     SvgPicture.asset(
-    //                       activeIndex == index ? item.activeSVGPath : item.svgPath,
-    //                       height: 24,
-    //                       width: 24,
-    //                       colorFilter: ColorFilter.mode(activeIndex == index ? activeTheme.text3 : activeTheme.text2.withAlpha(128), BlendMode.srcIn),
-    //                     ),
-    //                     const SizedBox(height: 2),
-    //                     Text(item.route, style: TextStyle(fontSize: 12, color: activeIndex == index ? activeTheme.text3 : activeTheme.text2.withAlpha(128))),
-    //                   ],
-    //                 ),
-    //               ),
-    //             );
-    //           }).toList(),
-    //     ),
-    //   ),
-    // );
   }
 }

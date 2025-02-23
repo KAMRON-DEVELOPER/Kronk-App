@@ -18,7 +18,7 @@ dependencies:
   hive:
   hive_flutter:
   flutter_bloc:
-  rive:
+  rive: ^0.13.20
   lottie:
   iconsax:
   page_transition:

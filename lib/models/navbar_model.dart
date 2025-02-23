@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:kronk/utility/my_icon.dart';
 
 class NavbarModel extends HiveObject {
   @HiveField(0)
   String route;
 
   @HiveField(1)
-  bool isEnabled;
+  int activeCodePoint;
 
   @HiveField(2)
-  String activeIconName;
+  int inactiveCodePoint;
 
   @HiveField(3)
-  String inactiveIconName;
+  bool isEnabled;
 
-  NavbarModel({required this.route, required this.activeIconName, required this.inactiveIconName, this.isEnabled = false});
+  NavbarModel({required this.route, required this.activeCodePoint, required this.inactiveCodePoint, this.isEnabled = false});
 
-  Icon get activeIcon => Icon(getIconByName(activeIconName), size: 24);
+  IconData get activeIconData => IconData(activeCodePoint, fontFamily: 'MyIcon');
 
-  Icon get inactiveIcon => Icon(getIconByName(inactiveIconName), size: 24);
+  IconData get inactiveIconData => IconData(inactiveCodePoint, fontFamily: 'MyIcon');
 }
