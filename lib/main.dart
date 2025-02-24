@@ -63,6 +63,8 @@ class MyApp extends ConsumerWidget {
           titleTextStyle: GoogleFonts.quicksand(color: activeTheme.text2, fontSize: 24, fontWeight: FontWeight.w600),
           actionsPadding: EdgeInsets.only(right: globalMargin2),
           iconTheme: IconThemeData(color: activeTheme.text2, size: 28),
+          scrolledUnderElevation: 0,
+          elevation: 0,
         ),
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: activeTheme.foreground1,

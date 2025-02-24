@@ -2,7 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kronk/models/post_model.dart';
-import 'package:kronk/services/community_services.dart';
+import 'package:kronk/services/api_service/community_services.dart';
 import 'package:kronk/utility/my_logger.dart';
 import 'package:kronk/utility/storage.dart';
 

@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kronk/utility/my_logger.dart';
-import '../../services/users_service.dart';
 import '../../utility/storage.dart';
+import '../../websocket_service/users_service.dart';
 import 'authentication_event.dart';
 import 'authentication_state.dart';
 

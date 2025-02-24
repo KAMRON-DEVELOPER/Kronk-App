@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:kronk/services/users_service.dart';
+import 'package:kronk/services/api_service/users_service.dart';
 import 'package:kronk/utility/storage.dart';
 
 class VerifyTokenInterceptor extends Interceptor {

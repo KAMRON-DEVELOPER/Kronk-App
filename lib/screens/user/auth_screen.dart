@@ -173,13 +173,13 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                       child:
                           state == AuthenticationLoading()
                               ? LoadingAnimationWidget.threeArchedCircle(color: activeTheme.background1, size: 32)
-                              : Text('Continue', style: Theme.of(context).textTheme.displayMedium?.copyWith(color: activeTheme.background1)),
+                              : Text('Continue', style: TextStyle(color: activeTheme.background1, fontSize: 20)),
                     ),
                     SizedBox(height: globalMargin1),
                     Row(
                       children: [
                         Expanded(child: Divider(color: activeTheme.text2.withAlpha(128), thickness: 1, endIndent: 8)),
-                        Text('or continue with', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: activeTheme.text2.withAlpha(128))),
+                        Text('or continue with', style: TextStyle(color: activeTheme.text2.withAlpha(128), fontSize: 16)),
                         Expanded(child: Divider(color: activeTheme.text2.withAlpha(128), thickness: 1, indent: 8)),
                       ],
                     ),
@@ -191,7 +191,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                             backgroundColor: activeTheme.foreground1,
                             fixedSize: Size((contentWidth1 - globalMargin1) / 2, buttonHeight1),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(cornerRadius1)),
-                            side: BorderSide(color: activeTheme.text2.withAlpha(32), width: 0.4),
+                            // side: BorderSide(color: activeTheme.text2.withAlpha(32), width: 0.4),
                           ),
                           onPressed: () => context.read<AuthenticationBloc>().add(SocialAuthEvent()),
                           child: Icon(IonIcons.logo_google, size: 32, color: activeTheme.text2),
@@ -202,7 +202,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                             backgroundColor: activeTheme.foreground1,
                             fixedSize: Size((contentWidth1 - globalMargin1) / 2, buttonHeight1),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(cornerRadius1)),
-                            side: BorderSide(color: activeTheme.text2.withAlpha(32), width: 0.4),
+                            // side: BorderSide(color: activeTheme.text2.withAlpha(32), width: 0.4),
                           ),
                           onPressed: () => context.read<AuthenticationBloc>().add(SocialAuthEvent()),
                           child: Icon(IonIcons.logo_apple, size: 32, color: activeTheme.text2),
@@ -212,7 +212,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                     SizedBox(height: globalMargin1),
                     GestureDetector(
                       onTap: () => Navigator.pushNamed(context, '/auth/request_reset_password'),
-                      child: Text('Forgot password?', style: Theme.of(context).textTheme.displaySmall?.copyWith(color: activeTheme.text2.withAlpha(128))),
+                      child: Text('Forgot password?', style: TextStyle(color: activeTheme.text2.withAlpha(128), fontSize: 16)),
                     ),
                   ],
                 ),

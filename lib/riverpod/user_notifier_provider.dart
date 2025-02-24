@@ -6,9 +6,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kronk/models/user_model.dart';
-import 'package:kronk/services/users_service.dart';
 import 'package:kronk/utility/my_logger.dart';
 import 'package:kronk/utility/storage.dart';
+import '../websocket_service/users_service.dart';
 
 enum ProfileState { view, edit }
 
