@@ -129,6 +129,13 @@ PageTransition? routes(RouteSettings settings, BuildContext context) {
         settings: settings,
       );
     default:
-      return null;
+      return PageTransition(
+        type: PageTransitionType.fade,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+        childCurrent: context.currentRoute,
+        child: BlocProvider(create: (BuildContext context) => AuthenticationBloc(), child: const SplashScreen()),
+        settings: settings,
+      );
   }
 }

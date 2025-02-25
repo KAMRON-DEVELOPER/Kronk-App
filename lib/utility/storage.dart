@@ -24,7 +24,7 @@ class Storage {
   }
 
   Future<void> initializeNavbar() async {
-    final List<String> navbarRoutes = ['feed', 'chat', 'education', 'note', 'todo', 'entertainment', 'profile'];
+    final List<String> navbarRoutes = ['/feed', '/chat', '/education', '/note', '/todo', '/entertainment', '/profile'];
     final defaultServices = navbarRoutes.map((String route) => NavbarModel(route: route)).toList();
 
     if (navbarBox.isEmpty) {

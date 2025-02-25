@@ -366,41 +366,6 @@ class SupportSectionWidget extends ConsumerWidget {
       child: Column(
         spacing: 8,
         children: [
-          Column(
-            children: [
-              Wrap(
-                children: [
-                  Icon(const IconData(0xe05b, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-                  Icon(const IconData(0xe985, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-
-                  Icon(const IconData(0xe986, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-                  Icon(const IconData(0xe987, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-
-                  Icon(const IconData(0xe988, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-                  Icon(const IconData(0xe989, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-
-                  Icon(const IconData(0xe98a, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-                  Icon(const IconData(0xe98c, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-                  Icon(const IconData(0xe995, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-                  Icon(const IconData(0xe947, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-                  Icon(const IconData(0xe955, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-                  Icon(const IconData(0xe99f, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-                  Icon(const IconData(0xe978, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-                  Icon(const IconData(0xe904, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-                  Icon(const IconData(0xe99d, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-
-                  Icon(const IconData(0xe9a5, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-                  Icon(const IconData(0xe9aa, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-                  Icon(const IconData(0xe976, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-                  Icon(const IconData(0xe911, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-                  Icon(const IconData(0xe959, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-                  Icon(const IconData(0xe945, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-                  Icon(const IconData(0xe935, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-                  Icon(const IconData(0xe933, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
-                ],
-              ),
-            ],
-          ),
           ElevatedButton(
             onPressed: () async {
               await customURLLauncher(isWebsite: true, url: 'https://buymeacoffee.com/kamronbek')
@@ -531,6 +496,7 @@ class BackButtonWidget extends ConsumerWidget {
           final Storage storage = Storage();
           storage.setSettingsAll({'isDoneServices': true});
           String firstRoute = storage.getFirstRoute();
+          // myLogger.i('firstRoute: $firstRoute');
           Navigator.pushReplacementNamed(context, firstRoute);
         }
       },

@@ -80,21 +80,20 @@ class KronkIcon {
 }
 
 IconData getNavbarIconByName({required String route, required bool isActive}) {
-  final List<String> _ = ['feed', 'chat', 'education', 'note', 'todo', 'entertainment', 'profile'];
   switch (route) {
-    case 'feed':
+    case '/feed':
       return isActive ? KronkIcon.quillFill : KronkIcon.quillOutline;
-    case 'chat':
+    case '/chat':
       return isActive ? KronkIcon.messageCircleLeftFill : KronkIcon.messageCircleLeftOutline;
-    case 'education':
+    case '/education':
       return isActive ? KronkIcon.bookFill : KronkIcon.bookOutline;
-    case 'note':
+    case '/note':
       return isActive ? KronkIcon.note1Fill : KronkIcon.note1Outline;
-    case 'todo':
+    case '/todo':
       return isActive ? KronkIcon.taskFill : KronkIcon.taskOutline;
-    case 'entertainment':
+    case '/entertainment':
       return isActive ? KronkIcon.playerFill : KronkIcon.playerOutline;
-    case 'profile':
+    case '/profile':
       return isActive ? KronkIcon.profileFill : KronkIcon.profileOutline;
 
     default:

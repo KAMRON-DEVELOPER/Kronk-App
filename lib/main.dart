@@ -37,10 +37,13 @@ class MyApp extends ConsumerWidget {
     final double textSize3 = dimensions.textSize3;
     // final double cornerRadius1 = dimensions.cornerRadius1;
     myLogger.i('contentWidth2: $contentWidth2');
+    myLogger.i('initialRoute: $initialRoute');
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Kronk',
       initialRoute: initialRoute,
+
+      onGenerateRoute: (RouteSettings settings) => routes(settings, context),
 
       theme: ThemeData(
         splashFactory: NoSplash.splashFactory,
@@ -94,8 +97,6 @@ class MyApp extends ConsumerWidget {
         iconTheme: const IconThemeData(color: Colors.greenAccent),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(backgroundColor: Colors.red),
       ),
-
-      onGenerateRoute: (RouteSettings settings) => routes(settings, context),
     );
   }
 }
