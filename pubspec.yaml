@@ -77,12 +77,11 @@ flutter:
     - assets/icons/others/
     - assets/animations/
     - assets/translations/
-    - assets/fonts/MyIcon.ttf
 
   fonts:
-    - family: MyIcon
+    - family: KronkIcon
       fonts:
-        - asset: assets/fonts/MyIcon.ttf
+        - asset: assets/fonts/KronkIcon.ttf
 
   uses-material-design: true
 

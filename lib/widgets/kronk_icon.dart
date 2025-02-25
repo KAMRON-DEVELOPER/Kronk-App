@@ -1,16 +1,9 @@
-// Place fonts/kronkIcon.ttf in your fonts/ directory and
-// add the following to your pubspec.yaml
-// flutter:
-//   fonts:
-//    - family: kronkIcon
-//      fonts:
-//       - asset: fonts/kronkIcon.ttf
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 class KronkIcon {
   KronkIcon._();
 
-  static const String _fontFamily = 'kronkIcon';
+  static const String _fontFamily = 'KronkIcon';
 
   static const IconData editPen3Outline = IconData(0xe000, fontFamily: _fontFamily);
   static const IconData editPen3Fill = IconData(0xe001, fontFamily: _fontFamily);
@@ -65,7 +58,7 @@ class KronkIcon {
   static const IconData playerFill = IconData(0xe032, fontFamily: _fontFamily);
   static const IconData playerOutline = IconData(0xe033, fontFamily: _fontFamily);
   static const IconData profileFill = IconData(0xe034, fontFamily: _fontFamily);
-  static const IconData outlineOutline = IconData(0xe035, fontFamily: _fontFamily);
+  static const IconData profileOutline = IconData(0xe035, fontFamily: _fontFamily);
   static const IconData taskFill = IconData(0xe036, fontFamily: _fontFamily);
   static const IconData taskOutline = IconData(0xe037, fontFamily: _fontFamily);
   static const IconData settingsFill = IconData(0xe038, fontFamily: _fontFamily);
@@ -84,4 +77,27 @@ class KronkIcon {
   static const IconData downloadDownArrow = IconData(0xe045, fontFamily: _fontFamily);
   static const IconData calendarOutline = IconData(0xe046, fontFamily: _fontFamily);
   static const IconData birthdayCakeOutline = IconData(0xe047, fontFamily: _fontFamily);
+}
+
+IconData getNavbarIconByName({required String route, required bool isActive}) {
+  final List<String> _ = ['feed', 'chat', 'education', 'note', 'todo', 'entertainment', 'profile'];
+  switch (route) {
+    case 'feed':
+      return isActive ? KronkIcon.quillFill : KronkIcon.quillOutline;
+    case 'chat':
+      return isActive ? KronkIcon.messageCircleLeftFill : KronkIcon.messageCircleLeftOutline;
+    case 'education':
+      return isActive ? KronkIcon.bookFill : KronkIcon.bookOutline;
+    case 'note':
+      return isActive ? KronkIcon.note1Fill : KronkIcon.note1Outline;
+    case 'todo':
+      return isActive ? KronkIcon.taskFill : KronkIcon.taskOutline;
+    case 'entertainment':
+      return isActive ? KronkIcon.playerFill : KronkIcon.playerOutline;
+    case 'profile':
+      return isActive ? KronkIcon.profileFill : KronkIcon.profileOutline;
+
+    default:
+      return Icons.error;
+  }
 }

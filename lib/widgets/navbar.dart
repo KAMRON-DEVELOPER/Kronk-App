@@ -32,8 +32,7 @@ class Navbar extends ConsumerWidget {
                 },
                 iconSize: 24,
                 isSelected: index == activeIndex,
-                icon: Icon(item.activeIconData),
-                selectedIcon: Icon(item.inactiveIconData),
+                icon: Icon(item.activeIconData(isActive: index == activeIndex)),
                 color: index == activeIndex ? activeTheme.text3 : activeTheme.text2.withAlpha(128),
                 tooltip: item.route,
               );
