@@ -6,6 +6,7 @@ import 'package:kronk/utility/dimensions.dart';
 import 'package:kronk/utility/extensions.dart';
 import 'package:kronk/utility/my_logger.dart';
 import 'package:kronk/widgets/my_theme.dart';
+import 'package:kronk/widgets/my_toast.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../bloc/authentication/authentication_bloc.dart';
 import '../../bloc/authentication/authentication_event.dart';
@@ -67,40 +68,44 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
         myLogger.d('🚨 listener: $state');
         if (state is AuthenticationLoading) {
         } else if (state is AuthenticationSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: activeTheme.background3,
-              content: const Column(children: [Text('🎉 You have logged in successfully.')]),
-              duration: const Duration(seconds: 5),
-              behavior: SnackBarBehavior.floating,
-              dismissDirection: DismissDirection.horizontal,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              margin: const EdgeInsets.only(bottom: 24, left: 16, right: 16),
-            ),
+          MyToast.showToast(
+            context: context,
+            activeTheme: activeTheme,
+            message: '🎉 You have logged in successfully',
+            type: ToastType.info,
+            duration: const Duration(seconds: 4),
           );
           await Future.delayed(const Duration(seconds: 5));
           try {
             if (!context.mounted) return;
             Navigator.pushNamedAndRemoveUntil(context, '/settings', (Route<dynamic> route) => false);
           } catch (error) {
-            myLogger.e('unexpected error while routing in login_screen: $error');
+            myLogger.e('🌋 unexpected error while routing in AuthScreen: $error');
           }
         } else if (state is GoogleAuthenticationSuccess) {
-          myLogger.i('google auth successfully done!!!');
-          Navigator.pushReplacementNamed(context, '/settings');
-        } else if (state is AuthenticationFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: activeTheme.background3,
-              content: Text(state.failureMessage!),
-              duration: const Duration(seconds: 5),
-              behavior: SnackBarBehavior.floating,
-              dismissDirection: DismissDirection.vertical,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              margin: EdgeInsets.only(bottom: globalMargin1, left: globalMargin1, right: globalMargin1),
-              elevation: 0,
-            ),
+          MyToast.showToast(
+            context: context,
+            activeTheme: activeTheme,
+            message: '🎉 You have logged in successfully',
+            type: ToastType.info,
+            duration: const Duration(seconds: 4),
           );
+          await Future.delayed(const Duration(seconds: 5));
+          try {
+            if (!context.mounted) return;
+            Navigator.pushNamedAndRemoveUntil(context, '/settings', (Route<dynamic> route) => false);
+          } catch (error) {
+            myLogger.e('🌋 unexpected error while routing in AuthScreen: $error');
+          }
+        } else if (state is AuthenticationFailure) {
+          MyToast.showToast(
+            context: context,
+            activeTheme: activeTheme,
+            message: '🎉 You have logged in successfully',
+            type: ToastType.error,
+            duration: const Duration(seconds: 4),
+          );
+          await Future.delayed(const Duration(seconds: 5));
         }
       },
       builder: (BuildContext context, AuthenticationState state) {

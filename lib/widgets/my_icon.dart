@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class MyIcons {
   static const String _fontFamily = 'MyIcon';
 
-  static const IconData buyMeCoffee0 = IconData(0xe918, fontFamily: _fontFamily);
-  static const IconData birthdayCakeSolid1 = IconData(0xe90f, fontFamily: _fontFamily);
+  static const IconData buyMeCoffee0 = IconData(0xE919, fontFamily: _fontFamily);
+  static const IconData birthdayCakeSolid1 = IconData(0xe910, fontFamily: _fontFamily);
   static const IconData birthdayCakeOutline0 = IconData(0xe90d, fontFamily: _fontFamily);
   static const IconData house0Solid = IconData(0xe93a, fontFamily: _fontFamily);
   static const IconData house0Outline = IconData(0xe939, fontFamily: _fontFamily);
@@ -18,8 +18,8 @@ class MyIcons {
   static const IconData pixelHeart = IconData(0xe95b, fontFamily: _fontFamily);
 
   // navbar
-  static const IconData quill0Solid = IconData(0xe982, fontFamily: _fontFamily); // feed not active
-  static const IconData quill0Outline = IconData(0xe981, fontFamily: _fontFamily); // feed active
+  static const IconData quill0Solid = IconData(0xe984, fontFamily: _fontFamily); // feed not active
+  static const IconData quill0Outline = IconData(0xe985, fontFamily: _fontFamily); // feed active
 
   static const IconData messageCircleLeft1Solid = IconData(0xe947, fontFamily: _fontFamily); // chat active
   static const IconData messageCircleLeft1Outline = IconData(0xe945, fontFamily: _fontFamily); // chat not active

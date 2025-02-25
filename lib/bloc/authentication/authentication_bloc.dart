@@ -98,11 +98,11 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
       // If the user is not signed in, initiate Google Sign-In
       if (firebaseUser == null) {
-        myLogger.i('firebaseUser is null and we need to authenticate it.');
+        myLogger.i('🤡 firebaseUser is null and we need to authenticate it.');
         final GoogleSignInAccount? googleSignInAccount = await GoogleSignIn().signIn();
 
         if (googleSignInAccount == null) {
-          emit(const AuthenticationFailure(failureMessage: 'Google sign-in canceled.'));
+          emit(const AuthenticationFailure(failureMessage: '🤡 Google sign-in canceled.'));
           return;
         }
 

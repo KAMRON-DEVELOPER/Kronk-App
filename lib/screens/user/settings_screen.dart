@@ -278,15 +278,26 @@ class _StatisticsSectionWidgetState extends ConsumerState<StatisticsSectionWidge
               height: 620,
               child: StreamBuilder<Map<String, dynamic>>(
                 stream: _adminWebsocketService.statsStream,
+                initialData: {'registered_users': 0, 'daily_active_users': 0},
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) return const FittedBox(child: CircularProgressIndicator());
                   final stats = snapshot.data!;
                   return GridView(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 8),
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      _buildStatisticCard(title: 'Total Users', value: stats['total_users'].toString(), currentTheme: currentTheme, textSize3: textSize3),
-                      _buildStatisticCard(title: 'Active Users', value: stats['active_users'].toString(), currentTheme: currentTheme, textSize3: textSize3),
+                      _buildStatisticCard(
+                        title: 'Total Registered Users',
+                        value: stats['registered_users'].toString(),
+                        currentTheme: currentTheme,
+                        textSize3: textSize3,
+                      ),
+                      _buildStatisticCard(
+                        title: 'Daily Active Users',
+                        value: stats['daily_active_users'].toString(),
+                        currentTheme: currentTheme,
+                        textSize3: textSize3,
+                      ),
                     ],
                   );
                 },
@@ -355,15 +366,46 @@ class SupportSectionWidget extends ConsumerWidget {
       child: Column(
         spacing: 8,
         children: [
+          Column(
+            children: [
+              Wrap(
+                children: [
+                  Icon(const IconData(0xe05b, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+                  Icon(const IconData(0xe985, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+
+                  Icon(const IconData(0xe986, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+                  Icon(const IconData(0xe987, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+
+                  Icon(const IconData(0xe988, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+                  Icon(const IconData(0xe989, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+
+                  Icon(const IconData(0xe98a, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+                  Icon(const IconData(0xe98c, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+                  Icon(const IconData(0xe995, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+                  Icon(const IconData(0xe947, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+                  Icon(const IconData(0xe955, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+                  Icon(const IconData(0xe99f, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+                  Icon(const IconData(0xe978, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+                  Icon(const IconData(0xe904, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+                  Icon(const IconData(0xe99d, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+
+                  Icon(const IconData(0xe9a5, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+                  Icon(const IconData(0xe9aa, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+                  Icon(const IconData(0xe976, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+                  Icon(const IconData(0xe911, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+                  Icon(const IconData(0xe959, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+                  Icon(const IconData(0xe945, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+                  Icon(const IconData(0xe935, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+                  Icon(const IconData(0xe933, fontFamily: 'MyIcon'), size: 32, color: currentTheme.text2),
+                ],
+              ),
+            ],
+          ),
           ElevatedButton(
             onPressed: () async {
               await customURLLauncher(isWebsite: true, url: 'https://buymeacoffee.com/kamronbek')
-                  .onError((error, stackTrace) {
-                    myLogger.w('!!! onError worked in buy me a coffee: $error');
-                  })
-                  .whenComplete(() {
-                    myLogger.w('!!! whenComplete worked in buy me a coffee');
-                  });
+                  .onError((error, stackTrace) => myLogger.w('!!! onError worked in buy me a coffee: $error'))
+                  .whenComplete(() => myLogger.w('!!! whenComplete worked in buy me a coffee'));
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xff4C66CC),
@@ -373,9 +415,9 @@ class SupportSectionWidget extends ConsumerWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SvgPicture.asset('assets/icons/others/buy_me_a_coffee.svg'),
+                SvgPicture.asset('assets/icons/others/buy-me-coffee-0.svg', width: 36),
                 Text('Buy me a coffee', style: GoogleFonts.pacifico(color: currentTheme.background1, fontSize: 24, fontWeight: FontWeight.w600)),
-                const SizedBox(width: 24),
+                const SizedBox(width: 36),
               ],
             ),
           ),
