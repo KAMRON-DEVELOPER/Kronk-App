@@ -4,7 +4,8 @@ import 'package:web_socket_channel/io.dart';
 
 class AdminWsService {
   // final wsUrl = Uri.parse('ws://192.168.31.43:8000/ws/admin/statistics');
-  final _channel = IOWebSocketChannel.connect('ws://192.168.31.43:8000/admin/ws/admin/statistics');
+
+  final _channel = IOWebSocketChannel.connect('ws://192.168.31.43:8000/admin/ws/admin/statistics', headers: {});
   final StreamController<Map<String, dynamic>> _streamController = StreamController.broadcast();
 
   AdminWsService() {

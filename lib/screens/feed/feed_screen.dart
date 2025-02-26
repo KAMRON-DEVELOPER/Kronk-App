@@ -63,37 +63,35 @@ class _FeedScreenState extends ConsumerState<FeedScreen> with AutomaticKeepAlive
       });
     });
 
-    return Scaffold(
-      body: DefaultTabController(
-        length: 2,
-        child: NestedScrollView(
-          controller: _scrollController,
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return [
-              const SliverAppBar(
-                title: Text('Feeds'),
-                leading: Icon(Icons.menu_rounded),
-                actions: [Icon(Icons.notifications_rounded)],
-                floating: true,
-                snap: true,
-                bottom: TabBar(tabs: [Tab(text: 'For You'), Tab(text: 'Global')]),
-              ),
-            ];
-          },
-          body: RefreshIndicator(
-            key: _refreshKey,
-            onRefresh: () async {
-              myLogger.i('Refreshing feed...');
-              await Future.delayed(const Duration(seconds: 3));
-              myLogger.i('Refreshing done.');
+    return RefreshIndicator(
+      key: _refreshKey,
+      onRefresh: () async {
+        myLogger.i('Refreshing feed...');
+        await Future.delayed(const Duration(seconds: 3));
+        myLogger.i('Refreshing done.');
+      },
+      child: Scaffold(
+        body: DefaultTabController(
+          length: 2,
+          child: NestedScrollView(
+            controller: _scrollController,
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return [
+                const SliverAppBar(
+                  title: Text('Feeds'),
+                  leading: Icon(Icons.menu_rounded),
+                  actions: [Icon(Icons.notifications_rounded)],
+                  floating: true,
+                  snap: true,
+                  bottom: TabBar(tabs: [Tab(text: 'For You'), Tab(text: 'Global')]),
+                ),
+              ];
             },
-            child: Stack(
+            body: Stack(
               children: [
-                Positioned.directional(
-                  height: 30,
-                  width: 100,
-                  top: 10,
-                  textDirection: TextDirection.ltr,
+                TabBarView(children: [HomeTimelineTab(_scrollController), GlobalTimelineTab(_scrollController)]),
+                Positioned.fromRelativeRect(
+                  rect: const RelativeRect.fromLTRB(120, 10, 120, 610),
                   child: GestureDetector(
                     onTap: () {
                       myLogger.i('Tapped to new post notification capsule.');
@@ -105,34 +103,41 @@ class _FeedScreenState extends ConsumerState<FeedScreen> with AutomaticKeepAlive
                       ref.read(postNotifyStateNotifierProvider.notifier).clear();
                     },
                     child: Container(
-                      color: activeTheme.background2,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
-                      child: Text('$userAvatarUrls'),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(color: activeTheme.background2, borderRadius: BorderRadius.circular(24)),
+                      child: Text('$userAvatarUrls posted'),
                     ),
                   ),
                 ),
-                TabBarView(children: [HomeTimelineTab(_scrollController), GlobalTimelineTab(_scrollController)]),
               ],
             ),
           ),
         ),
-      ),
-      floatingActionButton: ValueListenableBuilder<bool>(
-        valueListenable: _isNavbarVisible,
-        builder: (context, isVisible, child) {
-          return AnimatedContainer(duration: const Duration(milliseconds: 300), height: isVisible ? 56 : 0, child: isVisible ? child : const SizedBox.shrink());
-        },
-        child: FloatingActionButton(
-          onPressed: () => context.pushTransition(type: PageTransitionType.rightToLeft, child: const PostCreateScreen()),
-          child: const Icon(Icons.add_rounded),
+        floatingActionButton: ValueListenableBuilder<bool>(
+          valueListenable: _isNavbarVisible,
+          builder: (context, isVisible, child) {
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              height: isVisible ? 56 : 0,
+              child: isVisible ? child : const SizedBox.shrink(),
+            );
+          },
+          child: FloatingActionButton(
+            onPressed: () => context.pushTransition(type: PageTransitionType.rightToLeft, child: const PostCreateScreen()),
+            child: const Icon(Icons.add_rounded),
+          ),
         ),
-      ),
-      bottomNavigationBar: ValueListenableBuilder<bool>(
-        valueListenable: _isNavbarVisible,
-        builder: (context, isVisible, child) {
-          return AnimatedContainer(duration: const Duration(milliseconds: 300), height: isVisible ? 56 : 0, child: isVisible ? child : const SizedBox.shrink());
-        },
-        child: const Navbar(),
+        bottomNavigationBar: ValueListenableBuilder<bool>(
+          valueListenable: _isNavbarVisible,
+          builder: (context, isVisible, child) {
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              height: isVisible ? 56 : 0,
+              child: isVisible ? child : const SizedBox.shrink(),
+            );
+          },
+          child: const Navbar(),
+        ),
       ),
     );
   }

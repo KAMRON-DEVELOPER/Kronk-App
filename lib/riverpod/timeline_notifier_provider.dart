@@ -9,6 +9,8 @@ import 'package:kronk/utility/my_logger.dart';
 import 'package:kronk/utility/storage.dart';
 import 'package:web_socket_channel/io.dart';
 
+import '../websocket_service/users_service.dart';
+
 /* ------------------------------------------ Home Timeline ------------------------------------ */
 final homeTimelineNotifierProvider = AsyncNotifierProvider.autoDispose<HomeTimelineNotifier, List<PostModel>>(() => HomeTimelineNotifier());
 
@@ -151,7 +153,29 @@ class PostNotifyStateNotifier extends StateNotifier<List<String>> {
 }
 
 final postNotifyWsStreamProvider = StreamProvider.autoDispose<Map<String, String>>((ref) {
-  final IOWebSocketChannel channel = IOWebSocketChannel.connect('ws://192.168.31.43:8000/community/ws/new_post_notify');
+  Future<void> init() async {
+    final Storage storage = Storage();
+    String? accessToken = await storage.getAsyncAccessToken();
+
+    if (accessToken == null) {
+      UsersService usersService = UsersService();
+      final String? refreshToken = await storage.getAsyncRefreshToken();
+
+      if (refreshToken != null) {
+        Response? response = await usersService.fetchRefreshTokens(refreshToken: refreshToken);
+
+        if (response != null && response.statusCode == 200) {
+          await storage.setAsyncSettingsAll({...response.data});
+          accessToken = response.data['access_token'];
+        }
+      } else {
+        await storage.logOut();
+      }
+    }
+  }
+
+  final headers = {'Authorization': 'Bearer 123'};
+  final IOWebSocketChannel channel = IOWebSocketChannel.connect('ws://192.168.31.43:8000/community/ws/new_post_notify?token=456', headers: headers);
 
   ref.onDispose(() => channel.sink.close());
 
