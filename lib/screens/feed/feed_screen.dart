@@ -22,11 +22,15 @@ class FeedScreen extends ConsumerStatefulWidget {
 class _FeedScreenState extends ConsumerState<FeedScreen> with AutomaticKeepAliveClientMixin<FeedScreen> {
   late ScrollController _scrollController;
   late ValueNotifier<bool> _isNavbarVisible;
+  late GlobalKey<RefreshIndicatorState> _refreshKey;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _isNavbarVisible = ValueNotifier<bool>(true);
+    _refreshKey = GlobalKey<RefreshIndicatorState>();
+
     _scrollController.addListener(() {
       if (_scrollController.position.userScrollDirection == ScrollDirection.reverse) {
         _isNavbarVisible.value = false; // Hide navbar when scrolling down
@@ -46,7 +50,18 @@ class _FeedScreenState extends ConsumerState<FeedScreen> with AutomaticKeepAlive
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final MyTheme activeTheme = ref.watch(themeNotifierProvider);
     myLogger.i('FeedScreen is building...');
+
+    /// 🟢 Listen to new posts
+    final userAvatarUrls = ref.watch(postNotifyStateNotifierProvider);
+
+    /// 🟢 Listen to WebSocket updates
+    ref.listen(postNotifyWsStreamProvider, (previous, next) {
+      next.whenData((Map<String, String> data) {
+        ref.read(postNotifyStateNotifierProvider.notifier).addPost(data['user_avatar_url']);
+      });
+    });
 
     return Scaffold(
       body: DefaultTabController(
@@ -65,21 +80,57 @@ class _FeedScreenState extends ConsumerState<FeedScreen> with AutomaticKeepAlive
               ),
             ];
           },
-          body: TabBarView(children: [HomeTimelineTab(_scrollController), GlobalTimelineTab(_scrollController)]),
+          body: RefreshIndicator(
+            key: _refreshKey,
+            onRefresh: () async {
+              myLogger.i('Refreshing feed...');
+              await Future.delayed(const Duration(seconds: 3));
+              myLogger.i('Refreshing done.');
+            },
+            child: Stack(
+              children: [
+                Positioned.directional(
+                  height: 30,
+                  width: 100,
+                  top: 10,
+                  textDirection: TextDirection.ltr,
+                  child: GestureDetector(
+                    onTap: () {
+                      myLogger.i('Tapped to new post notification capsule.');
+                      _scrollController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.fastOutSlowIn);
+                      // ✅ Trigger pull-to-refresh manually
+                      _refreshKey.currentState?.show();
+
+                      /// Hide popup
+                      ref.read(postNotifyStateNotifierProvider.notifier).clear();
+                    },
+                    child: Container(
+                      color: activeTheme.background2,
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+                      child: Text('$userAvatarUrls'),
+                    ),
+                  ),
+                ),
+                TabBarView(children: [HomeTimelineTab(_scrollController), GlobalTimelineTab(_scrollController)]),
+              ],
+            ),
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.pushTransition(type: PageTransitionType.rightToLeft, child: const PostCreateScreen()),
-        child: const Icon(Icons.add_rounded),
+      floatingActionButton: ValueListenableBuilder<bool>(
+        valueListenable: _isNavbarVisible,
+        builder: (context, isVisible, child) {
+          return AnimatedContainer(duration: const Duration(milliseconds: 300), height: isVisible ? 56 : 0, child: isVisible ? child : const SizedBox.shrink());
+        },
+        child: FloatingActionButton(
+          onPressed: () => context.pushTransition(type: PageTransitionType.rightToLeft, child: const PostCreateScreen()),
+          child: const Icon(Icons.add_rounded),
+        ),
       ),
       bottomNavigationBar: ValueListenableBuilder<bool>(
         valueListenable: _isNavbarVisible,
         builder: (context, isVisible, child) {
-          return AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            height: isVisible ? 60 : 0, // Animate height transition
-            child: isVisible ? child : const SizedBox.shrink(),
-          );
+          return AnimatedContainer(duration: const Duration(milliseconds: 300), height: isVisible ? 56 : 0, child: isVisible ? child : const SizedBox.shrink());
         },
         child: const Navbar(),
       ),
@@ -203,8 +254,6 @@ class EmptyGlobalState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    myLogger.i('EmptyGlobalState is building...');
-
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -274,16 +323,11 @@ class _PostCreateScreenState extends ConsumerState<PostCreateScreen> {
     final MyTheme activeTheme = ref.watch(themeNotifierProvider);
     final Dimensions dimensions = Dimensions.of(context);
 
-    // final double contentWidth2 = dimensions.contentWidth2;
     final double globalMargin2 = dimensions.globalMargin2;
-    // final double buttonHeight1 = dimensions.buttonHeight1;
-    // final double textSize1 = dimensions.textSize1;
-    // final double textSize2 = dimensions.textSize2;
-    // final double textSize3 = dimensions.textSize3;
-    // final double cornerRadius1 = dimensions.cornerRadius1;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Post'),
+        // leadingWidth: 8,
         leading: GestureDetector(
           onTap: () => context.pushTransition(type: PageTransitionType.leftToRight, child: const FeedScreen()),
           child: Icon(Icons.arrow_back_rounded, color: activeTheme.text2),

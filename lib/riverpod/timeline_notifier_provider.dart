@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +7,7 @@ import 'package:kronk/models/post_model.dart';
 import 'package:kronk/services/api_service/community_services.dart';
 import 'package:kronk/utility/my_logger.dart';
 import 'package:kronk/utility/storage.dart';
+import 'package:web_socket_channel/io.dart';
 
 /* ------------------------------------------ Home Timeline ------------------------------------ */
 final homeTimelineNotifierProvider = AsyncNotifierProvider.autoDispose<HomeTimelineNotifier, List<PostModel>>(() => HomeTimelineNotifier());
@@ -34,7 +37,7 @@ class HomeTimelineNotifier extends AutoDisposeAsyncNotifier<List<PostModel>> {
         Response? response = await _communityServices.fetchHomeTimeline();
 
         if (response == null || (response.data is List && response.data.isEmpty)) {
-          myLogger.i('response is null or empty list.');
+          myLogger.i('response is null or empty list. response.data: ${response?.data}');
           return [];
         }
 
@@ -125,3 +128,35 @@ class GlobalTimelineNotifier extends AutoDisposeAsyncNotifier<List<PostModel>> {
 }
 
 /* ------------------------------------------ User Timeline ------------------------------------ */
+
+/* ------------------------------------------ Stream Notifier ------------------------------------ */
+
+final postNotifyStateNotifierProvider = StateNotifierProvider<PostNotifyStateNotifier, List<String>>((ref) {
+  return PostNotifyStateNotifier();
+});
+
+class PostNotifyStateNotifier extends StateNotifier<List<String>> {
+  PostNotifyStateNotifier() : super([]);
+
+  /// Update when a new post arrives
+  void addPost(String? userAvatarUrl) {
+    if (userAvatarUrl == null) return;
+    state = ([userAvatarUrl, ...state]).take(3).toList();
+  }
+
+  /// Clear posts (when user taps popup)
+  void clear() {
+    state = [];
+  }
+}
+
+final postNotifyWsStreamProvider = StreamProvider.autoDispose<Map<String, String>>((ref) {
+  final IOWebSocketChannel channel = IOWebSocketChannel.connect('ws://192.168.31.43:8000/community/ws/new_post_notify');
+
+  ref.onDispose(() => channel.sink.close());
+
+  return channel.stream.map((event) {
+    final decoded = jsonDecode(event as String);
+    return Map<String, String>.from(decoded);
+  });
+});

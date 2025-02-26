@@ -11,5 +11,5 @@ class NavbarModel extends HiveObject {
 
   NavbarModel({required this.route, this.isEnabled = false});
 
-  IconData activeIconData({required bool isActive}) => getNavbarIconByName(route: route, isActive: isActive);
+  IconData getIconData({required bool isActive}) => getNavbarIconByName(route: route, isActive: isActive);
 }

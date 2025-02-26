@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kronk/riverpod/theme_notifier_provider.dart';
 import 'package:kronk/utility/dimensions.dart';
-import 'package:kronk/utility/my_logger.dart';
 import 'package:kronk/utility/routes.dart';
 import 'package:kronk/utility/setup.dart';
 import 'package:kronk/widgets/my_theme.dart';
@@ -29,20 +28,19 @@ class MyApp extends ConsumerWidget {
     final MyTheme activeTheme = ref.watch(themeNotifierProvider);
     final Dimensions dimensions = Dimensions.of(context);
 
-    final double contentWidth2 = dimensions.contentWidth2;
+    // final double contentWidth2 = dimensions.contentWidth2;
     final double globalMargin2 = dimensions.globalMargin2;
     // final double buttonHeight1 = dimensions.buttonHeight1;
     // final double textSize1 = dimensions.textSize1;
     // final double textSize2 = dimensions.textSize2;
     final double textSize3 = dimensions.textSize3;
     // final double cornerRadius1 = dimensions.cornerRadius1;
-    myLogger.i('contentWidth2: $contentWidth2');
-    myLogger.i('initialRoute: $initialRoute');
+    // myLogger.i('contentWidth2: $contentWidth2');
+    // myLogger.i('initialRoute: $initialRoute');
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Kronk',
       initialRoute: initialRoute,
-
       onGenerateRoute: (RouteSettings settings) => routes(settings, context),
 
       theme: ThemeData(
@@ -63,6 +61,7 @@ class MyApp extends ConsumerWidget {
           backgroundColor: activeTheme.background1,
           surfaceTintColor: activeTheme.background1,
           centerTitle: true,
+          titleSpacing: 0,
           titleTextStyle: GoogleFonts.quicksand(color: activeTheme.text2, fontSize: 24, fontWeight: FontWeight.w600),
           actionsPadding: EdgeInsets.only(right: globalMargin2),
           iconTheme: IconThemeData(color: activeTheme.text2, size: 28),
@@ -79,8 +78,8 @@ class MyApp extends ConsumerWidget {
           splashFactory: NoSplash.splashFactory,
           overlayColor: WidgetStatePropertyAll(activeTheme.background1),
           indicatorAnimation: TabIndicatorAnimation.linear,
-          dividerHeight: 0.1,
-          dividerColor: activeTheme.text2.withAlpha(128),
+          dividerHeight: 0.2,
+          dividerColor: activeTheme.text2.withAlpha(32),
           indicatorSize: TabBarIndicatorSize.tab,
           indicator: UnderlineTabIndicator(
             insets: EdgeInsets.symmetric(horizontal: globalMargin2),
@@ -95,7 +94,6 @@ class MyApp extends ConsumerWidget {
         progressIndicatorTheme: ProgressIndicatorThemeData(color: activeTheme.text2, borderRadius: BorderRadius.circular(8)),
         textSelectionTheme: TextSelectionThemeData(selectionHandleColor: activeTheme.text2),
         iconTheme: const IconThemeData(color: Colors.greenAccent),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(backgroundColor: Colors.red),
       ),
     );
   }

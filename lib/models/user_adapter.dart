@@ -21,9 +21,7 @@ class UserAdapter extends TypeAdapter<UserModel> {
       bannerColor: reader.readString(),
       birthdate: reader.readBool() ? DateTime.parse(reader.readString()) : null,
       bio: reader.readString(),
-      gender: reader.readString(),
       country: reader.readString(),
-      stateOrProvince: reader.readString(),
       isAdmin: reader.readBool(),
       isBlocked: reader.readBool(),
       followersCount: reader.readInt(),
@@ -46,9 +44,7 @@ class UserAdapter extends TypeAdapter<UserModel> {
     writer.writeBool(obj.birthdate != null);
     if (obj.birthdate != null) writer.writeString(obj.birthdate!.toIso8601String());
     writer.writeString(obj.bio ?? '');
-    writer.writeString(obj.gender ?? '');
     writer.writeString(obj.country ?? '');
-    writer.writeString(obj.stateOrProvince ?? '');
     writer.writeBool(obj.isAdmin);
     writer.writeBool(obj.isBlocked);
     writer.writeInt(obj.followersCount);

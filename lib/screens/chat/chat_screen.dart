@@ -44,6 +44,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with AutomaticKeepAlive
                 actions: [Icon(Icons.notifications_rounded)],
                 floating: true,
                 snap: true,
+                automaticallyImplyLeading: false,
                 bottom: TabBar(tabs: [Tab(text: 'For You'), Tab(text: 'Global')]),
               ),
             ];

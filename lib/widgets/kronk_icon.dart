@@ -30,7 +30,7 @@ class KronkIcon {
   static const IconData userIdFill = IconData(0xe016, fontFamily: _fontFamily);
   static const IconData userIdOutline = IconData(0xe017, fontFamily: _fontFamily);
   static const IconData ufoOutline = IconData(0xe018, fontFamily: _fontFamily);
-  static const IconData ufoSolid = IconData(0xe019, fontFamily: _fontFamily);
+  static const IconData ufoFill = IconData(0xe019, fontFamily: _fontFamily);
   static const IconData teaCupOutline = IconData(0xe01a, fontFamily: _fontFamily);
   static const IconData teaCupFill = IconData(0xe01b, fontFamily: _fontFamily);
   static const IconData questionOutline = IconData(0xe01c, fontFamily: _fontFamily);
@@ -82,11 +82,17 @@ class KronkIcon {
 IconData getNavbarIconByName({required String route, required bool isActive}) {
   switch (route) {
     case '/feed':
-      return isActive ? KronkIcon.quillFill : KronkIcon.quillOutline;
+      // return isActive ? KronkIcon.ufoFill : KronkIcon.ufoOutline;
+    // return isActive ? KronkIcon.planetFill : KronkIcon.planetOutline;
+    // return isActive ? KronkIcon.usersFill : KronkIcon.usersOutline;
+    return isActive ? KronkIcon.quillFill : KronkIcon.quillOutline;
     case '/chat':
-      return isActive ? KronkIcon.messageCircleLeftFill : KronkIcon.messageCircleLeftOutline;
+      // return isActive ? KronkIcon.ghostFill : KronkIcon.ghostOutline;
+    // return isActive ? KronkIcon.messageSquareBottomFill : KronkIcon.messageSquareBottomOutline;
+    return isActive ? KronkIcon.messageCircleLeftFill : KronkIcon.messageCircleLeftOutline;
     case '/education':
-      return isActive ? KronkIcon.bookFill : KronkIcon.bookOutline;
+      return isActive ? KronkIcon.rulerPenFill : KronkIcon.rulerPenOutline;
+    // return isActive ? KronkIcon.bookFill : KronkIcon.bookOutline;
     case '/note':
       return isActive ? KronkIcon.note1Fill : KronkIcon.note1Outline;
     case '/todo':

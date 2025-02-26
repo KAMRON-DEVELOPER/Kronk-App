@@ -1,5 +1,21 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
+/*
+first_name
+last_name
+username
+email
+password
+avatar
+banner
+banner_color
+birthdate
+bio
+country
+is_admin
+is_blocked
+*/
+
 class UserModel extends HiveObject {
   @HiveField(0)
   String id;
@@ -26,18 +42,14 @@ class UserModel extends HiveObject {
   @HiveField(11)
   String? bio;
   @HiveField(12)
-  String? gender;
-  @HiveField(13)
   String? country;
-  @HiveField(14)
-  String? stateOrProvince;
-  @HiveField(15)
+  @HiveField(13)
   bool isAdmin;
-  @HiveField(16)
+  @HiveField(14)
   bool isBlocked;
-  @HiveField(17)
+  @HiveField(15)
   int followersCount;
-  @HiveField(18)
+  @HiveField(16)
   int followingsCount;
 
   UserModel({
@@ -53,9 +65,7 @@ class UserModel extends HiveObject {
     this.bannerColor,
     this.birthdate,
     this.bio,
-    this.gender,
     this.country,
-    this.stateOrProvince,
     required this.isAdmin,
     required this.isBlocked,
     required this.followersCount,
@@ -76,9 +86,7 @@ class UserModel extends HiveObject {
       bannerColor: json['banner_color'],
       birthdate: json['birthdate'] != null ? DateTime.parse(json['birthdate']) : null,
       bio: json['bio'],
-      gender: json['gender'],
       country: json['country'],
-      stateOrProvince: json['state_or_province'],
       isAdmin: json['is_admin'] ?? false,
       isBlocked: json['is_blocked'] ?? false,
       followersCount: json['followers_count'] ?? 0,
@@ -96,9 +104,7 @@ class UserModel extends HiveObject {
       'banner': banner,
       'birthdate': birthdate?.toIso8601String(),
       'bio': bio,
-      'gender': gender,
       'country': country,
-      'state_or_province': stateOrProvince,
       'is_admin': isAdmin,
       'is_blocked': isBlocked,
     };
@@ -118,9 +124,7 @@ class UserModel extends HiveObject {
       bannerColor: updateData?.bannerColor ?? bannerColor,
       birthdate: updateData?.birthdate ?? birthdate,
       bio: updateData?.bio ?? bio,
-      gender: updateData?.gender ?? gender,
       country: updateData?.country ?? country,
-      stateOrProvince: updateData?.stateOrProvince ?? stateOrProvince,
       isAdmin: updateData?.isAdmin ?? isAdmin,
       isBlocked: updateData?.isBlocked ?? isBlocked,
       followersCount: followersCount,

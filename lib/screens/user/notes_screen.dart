@@ -15,17 +15,13 @@ class NotesScreen extends ConsumerStatefulWidget {
 class _NotesScreenState extends ConsumerState<NotesScreen> {
   @override
   Widget build(BuildContext context) {
-    final MyTheme currentTheme = ref.watch(themeNotifierProvider);
+    final MyTheme activeTheme = ref.watch(themeNotifierProvider);
 
     return Scaffold(
-      backgroundColor: currentTheme.background1,
+      backgroundColor: activeTheme.background1,
+      appBar: AppBar(title: const Text('Note Screen'), automaticallyImplyLeading: true),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Notes Screen', style: TextStyle(color: currentTheme.text3, fontSize: 36)),
-          ],
-        ),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [Text('Notes Screen', style: TextStyle(color: activeTheme.text3, fontSize: 36))]),
       ),
       bottomNavigationBar: const Navbar(),
     );

@@ -35,6 +35,7 @@ class ProfileScreen extends ConsumerWidget {
         backgroundColor: activeTheme.background1,
         title: Text('Profile', style: TextStyle(color: activeTheme.text3)),
         centerTitle: true,
+        automaticallyImplyLeading: true,
         actions: [IconButton(icon: Icon(Icons.settings, color: activeTheme.text2), onPressed: () => Navigator.pushNamed(context, '/settings'))],
       ),
       body: asyncUser.when(

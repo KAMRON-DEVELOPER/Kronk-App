@@ -5,15 +5,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kronk/models/navbar_model.dart';
 import 'package:kronk/riverpod/navbar_notifier_provider.dart';
 import 'package:kronk/riverpod/theme_notifier_provider.dart';
-import 'package:kronk/services/websocket_service/admin_websocket_service.dart';
+import 'package:kronk/services/websocket_service/admin_ws_service.dart';
 import 'package:kronk/utility/dimensions.dart';
 import 'package:kronk/utility/my_logger.dart';
 import 'package:kronk/utility/url_launches.dart';
 import 'package:kronk/utility/storage.dart';
 import 'package:kronk/widgets/custom_painters.dart';
+import 'package:kronk/widgets/custom_toggle.dart';
 import 'package:kronk/widgets/my_theme.dart';
 import 'package:sliver_tools/sliver_tools.dart';
-import '../../widgets/custom_toggle.dart';
 import 'package:in_app_review/in_app_review.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
@@ -239,17 +239,17 @@ class StatisticsSectionWidget extends ConsumerStatefulWidget {
 }
 
 class _StatisticsSectionWidgetState extends ConsumerState<StatisticsSectionWidget> {
-  late AdminWebsocketService _adminWebsocketService;
+  late AdminWsService _adminWsService;
 
   @override
   void initState() {
     super.initState();
-    _adminWebsocketService = AdminWebsocketService();
+    _adminWsService = AdminWsService();
   }
 
   @override
   void dispose() {
-    _adminWebsocketService.dispose();
+    _adminWsService.dispose();
     super.dispose();
   }
 
@@ -277,7 +277,7 @@ class _StatisticsSectionWidgetState extends ConsumerState<StatisticsSectionWidge
             SizedBox(
               height: 620,
               child: StreamBuilder<Map<String, dynamic>>(
-                stream: _adminWebsocketService.statsStream,
+                stream: _adminWsService.statsStream,
                 initialData: {'registered_users': 0, 'daily_active_users': 0},
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) return const FittedBox(child: CircularProgressIndicator());
