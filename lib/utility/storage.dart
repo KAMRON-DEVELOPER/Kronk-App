@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:kronk/services/api_service/users_service.dart';
 import 'package:kronk/utility/my_logger.dart';
 import 'package:kronk/widgets/my_theme.dart';
 import 'package:tuple/tuple.dart';
@@ -88,8 +90,33 @@ class Storage {
   }
 
   Future<String?> getAsyncAccessToken() async {
-    final String? accessToken = await settingsBox.get('access_token');
-    return (accessToken != null && !JwtDecoder.isExpired(accessToken)) ? accessToken : null;
+    String? accessToken = await settingsBox.get('access_token');
+    if (accessToken == null) return null;
+
+    if (JwtDecoder.isExpired(accessToken)) {
+      UsersService usersService = UsersService();
+      final String? refreshToken = await getAsyncRefreshToken();
+      if (refreshToken == null) return null;
+
+      /// fetch refresh token if it is about to expire
+      Duration refreshTokenRemainingTime = JwtDecoder.getRemainingTime(refreshToken);
+      if (refreshTokenRemainingTime.compareTo(const Duration(days: 1)) < 0) {
+        Response? response = await usersService.fetchRefreshTokens(refreshToken: refreshToken);
+
+        if (response != null && response.statusCode == 200) {
+          await settingsBox.putAll({...response.data});
+          accessToken = response.data['access_token'];
+        }
+      }
+
+      Response? response = await usersService.fetchAccessTokens(refreshToken: refreshToken);
+      if (response != null && response.statusCode == 200) {
+        accessToken = response.data['access_token'];
+        await settingsBox.put('access_token', accessToken);
+      }
+    }
+
+    return accessToken;
   }
 
   Future<String?> getAsyncRefreshToken() async {

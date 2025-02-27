@@ -92,13 +92,24 @@ class UsersService {
     }
   }
 
+  Future<Response?> fetchAccessTokens({required String refreshToken}) async {
+    try {
+      Response response = await _dio.post('/access', options: Options(headers: {'Authorization': 'Bearer $refreshToken'}));
+      myLogger.i('🚀 response.data in fetchAccessTokens: ${response.data}  statusCode: ${response.statusCode}');
+      return response;
+    } catch (error) {
+      myLogger.w('🌋 catch in fetchAccessTokens: ${error.toString()}');
+      return null;
+    }
+  }
+
   Future<Response?> fetchRefreshTokens({required String refreshToken}) async {
     try {
       Response response = await _dio.post('/refresh', options: Options(headers: {'Authorization': 'Bearer $refreshToken'}));
       myLogger.i('🚀 response.data in fetchRefreshTokens: ${response.data}  statusCode: ${response.statusCode}');
       return response;
     } catch (error) {
-      myLogger.w('🌋 catch in fetchToken: ${error.toString()}');
+      myLogger.w('🌋 catch in fetchRefreshTokens: ${error.toString()}');
       return null;
     }
   }

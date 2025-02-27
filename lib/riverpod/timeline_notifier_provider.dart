@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -8,8 +9,6 @@ import 'package:kronk/services/api_service/community_services.dart';
 import 'package:kronk/utility/my_logger.dart';
 import 'package:kronk/utility/storage.dart';
 import 'package:web_socket_channel/io.dart';
-
-import '../websocket_service/users_service.dart';
 
 /* ------------------------------------------ Home Timeline ------------------------------------ */
 final homeTimelineNotifierProvider = AsyncNotifierProvider.autoDispose<HomeTimelineNotifier, List<PostModel>>(() => HomeTimelineNotifier());
@@ -140,47 +139,34 @@ final postNotifyStateNotifierProvider = StateNotifierProvider<PostNotifyStateNot
 class PostNotifyStateNotifier extends StateNotifier<List<String>> {
   PostNotifyStateNotifier() : super([]);
 
-  /// Update when a new post arrives
   void addPost(String? userAvatarUrl) {
     if (userAvatarUrl == null) return;
     state = ([userAvatarUrl, ...state]).take(3).toList();
   }
 
-  /// Clear posts (when user taps popup)
   void clear() {
     state = [];
   }
 }
 
-final postNotifyWsStreamProvider = StreamProvider.autoDispose<Map<String, String>>((ref) {
-  Future<void> init() async {
-    final Storage storage = Storage();
-    String? accessToken = await storage.getAsyncAccessToken();
+final postNotifyWsStreamProvider = StreamProvider.autoDispose<Map<String, String>>((ref) async* {
+  final Storage storage = Storage();
+  String? accessToken = await storage.getAsyncAccessToken();
 
-    if (accessToken == null) {
-      UsersService usersService = UsersService();
-      final String? refreshToken = await storage.getAsyncRefreshToken();
-
-      if (refreshToken != null) {
-        Response? response = await usersService.fetchRefreshTokens(refreshToken: refreshToken);
-
-        if (response != null && response.statusCode == 200) {
-          await storage.setAsyncSettingsAll({...response.data});
-          accessToken = response.data['access_token'];
-        }
-      } else {
-        await storage.logOut();
-      }
-    }
+  if (accessToken == null) {
+    /// LogOut!
+    return;
   }
 
-  final headers = {'Authorization': 'Bearer 123'};
-  final IOWebSocketChannel channel = IOWebSocketChannel.connect('ws://192.168.31.43:8000/community/ws/new_post_notify?token=456', headers: headers);
+  final headers = {'Authorization': 'Bearer $accessToken'};
+  final IOWebSocketChannel channel = IOWebSocketChannel.connect('ws://192.168.31.43:8000/community/ws/new_post_notify', headers: headers);
 
   ref.onDispose(() => channel.sink.close());
 
-  return channel.stream.map((event) {
+  yield* channel.stream.map((event) {
+    myLogger.d('event in channel.stream.map: $event');
     final decoded = jsonDecode(event as String);
+    myLogger.d('decoded in channel.stream.map: $decoded');
     return Map<String, String>.from(decoded);
   });
 });

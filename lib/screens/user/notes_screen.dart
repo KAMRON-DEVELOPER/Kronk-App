@@ -18,8 +18,7 @@ class _NotesScreenState extends ConsumerState<NotesScreen> {
     final MyTheme activeTheme = ref.watch(themeNotifierProvider);
 
     return Scaffold(
-      backgroundColor: activeTheme.background1,
-      appBar: AppBar(title: const Text('Note Screen'), automaticallyImplyLeading: true),
+      appBar: AppBar(title: const Text('Note Screen'), automaticallyImplyLeading: false),
       body: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [Text('Notes Screen', style: TextStyle(color: activeTheme.text3, fontSize: 36))]),
       ),

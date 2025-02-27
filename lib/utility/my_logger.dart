@@ -13,12 +13,8 @@ const String white = '\x1B[37m';
 class SimplePrinter extends LogPrinter {
   @override
   List<String> log(LogEvent event) {
-    //print('location: ${StackTrace.current}');
-
-    // Use the stack trace from the event if available, else generate a new one
     final trace = event.stackTrace?.toString().split('\n') ?? StackTrace.current.toString().split('\n');
 
-    // Find the first relevant stack trace line (ignoring `my_logger.dart` and `logger`)
     String? location;
     for (var line in trace) {
       if (!line.contains('package:logger') && !line.contains('package:kronk/utility/my_logger.dart')) {
@@ -27,10 +23,8 @@ class SimplePrinter extends LogPrinter {
       }
     }
 
-    // Fallback if location isn't found
     location ??= 'unknown';
 
-    // Define log level emoji and colors
     final levelInfo =
         {
           Level.trace: {'emoji': '🔍', 'color': cyan},
@@ -45,7 +39,7 @@ class SimplePrinter extends LogPrinter {
     final color = levelInfo['color'];
     final emoji = levelInfo['emoji'];
 
-    return ['$color($location) $emoji ${event.message}'];
+    return ['$color($location) $emoji ${event.message}$reset'];
   }
 }
 

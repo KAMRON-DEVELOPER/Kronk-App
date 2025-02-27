@@ -16,7 +16,7 @@ class _EducationScreenState extends ConsumerState<EducationScreen> {
   Widget build(BuildContext context) {
     final MyTheme activeTheme = ref.watch(themeNotifierProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Education Screen'), automaticallyImplyLeading: true),
+      appBar: AppBar(title: const Text('Education Screen'), automaticallyImplyLeading: false),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

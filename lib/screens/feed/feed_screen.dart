@@ -59,9 +59,12 @@ class _FeedScreenState extends ConsumerState<FeedScreen> with AutomaticKeepAlive
     /// 🟢 Listen to WebSocket updates
     ref.listen(postNotifyWsStreamProvider, (previous, next) {
       next.whenData((Map<String, String> data) {
+        myLogger.d('data in ref.listen: $data');
         ref.read(postNotifyStateNotifierProvider.notifier).addPost(data['user_avatar_url']);
       });
     });
+
+    myLogger.d('userAvatarUrls in FeedScreen build(): $userAvatarUrls');
 
     return RefreshIndicator(
       key: _refreshKey,
@@ -89,23 +92,36 @@ class _FeedScreenState extends ConsumerState<FeedScreen> with AutomaticKeepAlive
             },
             body: Stack(
               children: [
+                /// Tabs
                 TabBarView(children: [HomeTimelineTab(_scrollController), GlobalTimelineTab(_scrollController)]),
-                Positioned.fromRelativeRect(
+
+                /// Notification capsule
+                if (userAvatarUrls.isNotEmpty) Positioned.fromRelativeRect(
                   rect: const RelativeRect.fromLTRB(120, 10, 120, 610),
                   child: GestureDetector(
                     onTap: () {
-                      myLogger.i('Tapped to new post notification capsule.');
+                      myLogger.d('Tapped to new post notification capsule.');
                       _scrollController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.fastOutSlowIn);
-                      // ✅ Trigger pull-to-refresh manually
                       _refreshKey.currentState?.show();
-
-                      /// Hide popup
                       ref.read(postNotifyStateNotifierProvider.notifier).clear();
                     },
                     child: Container(
                       alignment: Alignment.center,
                       decoration: BoxDecoration(color: activeTheme.background2, borderRadius: BorderRadius.circular(24)),
-                      child: Text('$userAvatarUrls posted'),
+                      child: Row(
+                        children: [
+                          ...userAvatarUrls.map((userAvatarUrl) {
+                            return CircleAvatar(
+                              child: FadeInImage(
+                                image: NetworkImage('http://192.168.31.43:9000/dev-bucket/$userAvatarUrl'),
+                                placeholder: const AssetImage('assets/placeholder.png'),
+                                fadeInDuration: const Duration(milliseconds: 300),
+                              ),
+                            );
+                          }),
+                          const Text('posted'),
+                        ],
+                      ),
                     ),
                   ),
                 ),
